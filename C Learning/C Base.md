@@ -29,4 +29,67 @@ C程序的数据分为四个部分
 
 声明变量的时候就会申请内存单元
 
+### 9.5 共用体
+
+共用体示例
+
+```c
+union TMP{
+    int i;
+    char ch;
+    float f;
+};
+
+union TMP tmp1,tmp2;
+tmp1.i = 54;
+tmp2.ch = 'A';
+printf("%c", tmp1.ch);
+printf("%c", tmp2.float);
+```
+
+结果
+
+```c
+6
+0.000000
+```
+
+例中共用体中的int char float使用同一起始地址，**取值与存值**都是按照**数据类型**来的
+
+初始化样例
+
+```c
+union TMP tmp1 = {16};          //默认对第一个值赋值
+union TMP tmp2 = {.ch = 'c'};   //指定一个值赋值
+```
+
+需要注意的是，不能对多余一个值同时赋值
+
+C99允许同类型的共用体变量互相赋值
+
+```c
+tmp1 = tmp2;
+```
+
+### 9.6 枚举
+
+枚举示例
+
+```c
+enum Weekday{sun, mon, tue, wed, thur, fri, sat};
+enum Weekday wrokday, weekend;
+workday = mon;  //可以用枚举成员赋值
+weekend = sun;
+workday = 1;    //也可以用数字赋值，只要不超过界限
+printf("%d",weekend);
+```
+
+结果
+
+```c
+0   //枚举类型值从0开始
+```
+
+所以可以把枚举看成一个特定的数组
+
 [1]:<https://www.zhihu.com/question/28191923>
