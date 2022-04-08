@@ -100,6 +100,36 @@ printf("%d",weekend);
 
 要想使用`exit(0)`需要`#include<stdlib.h>`
 
+### fopen()
+
+```c
+FILE* fopen(char *filename,char *mode);
+```
+
+如果访问文件出错，例如只读模式打开一个不存在的文件，则返回NULL指针
+
+注意，w模式会破坏文件原有的内容，编辑已有的应该是a模式
+
+### fgetc()与fputc()
+
+返回的EOF的值是-1
+
+### fgets()与fputs()
+
+```c
+char* fgets(char* s, size_t size, FILE* fp);
+```
+
+从fp处开始读取**size-1**大小的字符串，后加"\\0"后赋值到s指向的内存空间，该函数返回的也是该内存空间的地址，如果出错会**返回NULL，s不做处理**
+
+如果提前遇到换行符或者文件尾，则会提前返回
+
+```c
+int fputs(char* s,FILE* fp);
+```
+
+输出成功，返回非负值（Win64测试下是0），否则返回EOF
+
 ## 其他
 
 ### 随机数（rand(),srand())
@@ -161,3 +191,38 @@ printf("%d",weekend);
 注意：`scanf_s("%s",buf,10)`不能接收带空格的字符串输入，虽然它的指定长度是10， 但是遇到空格时即使没有满10个字符它也自动结束输入了。
 
 [1]:<https://www.zhihu.com/question/28191923>
+
+## 内存
+
+### 三个函数
+
+#### calloc
+
+```c
+void *calloc(size_t num, size_t size);
+```
+
+注意内存分配用的数字皆为无符号整数。分配num个size字节大小的空间，**初始化为0**，返回该片空间的地址。
+
+#### malloc
+
+```c
+void *malloc(size_t num);
+```
+
+分配num字节的内存，并返回该部分内存的地址，不做初始化。
+
+#### realloc
+
+```c
+void *realloc(void *address, size_t newsize);
+```
+
+address是要调整的内存区域的地址
+
+- 是空指针：相当于malloc()，申请一块newsize的内存，不作初始化
+- 不是空指针：会将该片内存调整到newsize大小
+  - 如果newsize比原本的内存区域小：舍弃掉newsize之后的部分
+  - 如果newsize并原本的内存区域大：原本部分内存中的数据将会保留，新申请的空间不作初始化
+    - 如果newsize比该片堆内存小，则仅将原本的区域扩展，并返回原来的地址
+    - 如果newsize比该片对内存大，则将内容复制到新的内存区域，free()掉先前区域
