@@ -100,7 +100,7 @@ printf("%d",weekend);
 
 要想使用`exit(0)`需要`#include<stdlib.h>`
 
-### fopen()
+### `fopen()`
 
 ```c
 FILE* fopen(char *filename,char *mode);
@@ -110,17 +110,19 @@ FILE* fopen(char *filename,char *mode);
 
 注意，w模式会破坏文件原有的内容，编辑已有的应该是a模式
 
-### fgetc()与fputc()
+### `fgetc()`与`fputc()`
 
 返回的EOF的值是-1
 
-### fgets()与fputs()
+### `fgets()`与`fputs()`
 
 ```c
-char* fgets(char* s, size_t size, FILE* fp);
+char* fgets(char* s, int , FILE* fp);
 ```
 
-从fp处开始读取**size-1**大小的字符串，后加"\\0"后赋值到s指向的内存空间，该函数返回的也是该内存空间的地址，如果出错会**返回NULL，s不做处理**
+从fp处开始读取**count-1**大小的字符串，后加"\\0"后赋值到s指向的内存空间，该函数返回的也是该内存空间的地址，如果出错会**返回NULL，s不做处理**
+
+如果count\<0那么啥也不做
 
 如果提前遇到换行符或者文件尾，则会提前返回
 
@@ -129,6 +131,38 @@ int fputs(char* s,FILE* fp);
 ```
 
 输出成功，返回非负值（Win64测试下是0），否则返回EOF
+
+### `rewind()`
+
+```c
+void rewind(FILE* fp);
+```
+
+用于重置fp指向文件头
+
+- 当以 r 或 w 模式打开文件时，使用该函数会使fp回到文件头，值得注意的是，如果是 w 模式，回到文件头后如果继续写，会类似于键盘上的insert模式，把前面的数据覆盖掉
+- 当以 a 模式打开文件时，虽然会指向文件头，但继续添加的字符依然会接到文件的末尾，然后
+
+### `fseek()`
+
+```c
+int fseek(FILE *fp, long offset, int origin);
+```
+
+origin有三个常量
+
+- `SEEK_SET`
+- `SEEK_CUR`
+- `SEEK_END`
+
+### `ftell()`
+
+```c
+long ftell(FILE* fp);
+```
+
+返回fp相对于文件头的偏移量，以字节表示
+
 
 ## 其他
 
