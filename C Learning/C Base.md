@@ -163,8 +163,91 @@ long ftell(FILE* fp);
 
 返回fp相对于文件头的偏移量，以字节表示
 
+## 内嵌汇编
+
+可能会有错误，并不是特别理解
+
+示例1：
+
+```c
+//本段代码测试的是看push %rsp做的究竟是什么
+long long stack1;
+long long stack2;
+asm("movq %%rsp,%[before]\n\t"
+    "push %%rsp\n\t"
+    "pop %[end]"
+    :[before] "=r" (stack1),
+    [end] "=r" (stack2)
+);
+printf("%x\n",stack1);
+printf("%x",stack2);
+```
+
+注意，asm里面的参数有四个，分别是
+
+1. 汇编代码
+2. 输出
+3. 输入
+4. 会被修改的寄存器
+
+即`asm ( "statements" : output_regs : input_regs : clobbered_regs)`，每一部分之间都用冒号进行分隔，靠后的部分如果没有可以省去冒号
+
+### 汇编代码
+
+示例代码2：
+
+```c
+asm("movq %%rsp,%[before]\n\t"
+    "push %%rsp\n\t"
+    "pop %[end]")
+```
+
+该部分为**一整个字符串**，如果汇编有多行的话，用`\n\t`隔开，若想要较为美观的效果，可参照示例2
+
+寄存器有三种表示方式
+
+#### 直接指定方式
+
+注意要多加一个%号，例如`%%rsp`
+
+#### 数字占位符
+
+例如`%0`，`%1`…，`%9`,最多为10个，指令中使用占位符表示的操作数，总被视为long型（4，个字节），但对其施加的操作根据指令可以是字或者字节，当把操作数当作字或者字节使用时，默认为低字或者低字节。对字节操作可以显式的指明是低字节还是次字节。方法是在%和序号之间插入一个字母，“b”代表低字节，“h”代表高字节，例如：%h1。
+
+#### 指定名称作为占位符
+
+数字占位符只有10个而且难以管理，可以自己命名占位符，格式如例：`%[shit]`
+
+### 输出
+
+每一个寄存器的格式如下：
+`[shit] "=r" (num)`
+
+其中，第一部分是自定义占位符，我们在上面的汇编里把这个寄存器称作`shit`
+第二部分`"=r"`表示存放位置为寄存器，写作`"=m"`表示存放位置为内存
+第三部分指代要把内容输出到哪个**变量**，此例中变量为`num`
+
+### 输入
+
+每一个寄存器的格式如下：
+`[fuck] "r" (inum)`
+
+第一部分是自定义占位符，我们在上面的汇编里把这个寄存器称作`fuck`
+第二部分`"r"`表示为寄存器，写作`"m"`表示为内存，注意和输出相比这里**没有等号**
+第三部分指代要把内容从哪个**变量**读取，此例中变量为`inum`
+
+### 会被修改的寄存器
+
+参考资料1：[GCC内嵌汇编 - An Amateur Programmer's Blogs](https://dirtysalt.github.io/html/gcc-asm.html)
+参考资料2：[内嵌汇编- BraveY](https://bravey.github.io/2019-10-31-%E5%86%85%E5%B5%8C%E6%B1%87%E7%BC%96.html)
+参考资料3：[C语言的内嵌汇编 - 知乎](https://zhuanlan.zhihu.com/p/348372132)
+参考资料4：[CS:APP3e Web Aside ASM:EASM:Combining Assembly Code with C Programs](http://csapp.cs.cmu.edu/3e/waside/waside-embedded-asm.pdf)
 
 ## 其他
+
+### 整数类型
+
+包含在`<stdint.h>`内，例如128位int可用`__int128`表示，而64位整数最大值可用`INT64_MAX`表示
 
 ### 随机数（rand(),srand())
 
