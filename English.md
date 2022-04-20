@@ -15,3 +15,4 @@
 |i.e.|换句话说||
 |colon|冒号|.n|
 |constraint|约束|.n|
+|mantissa|尾数|.n|仮数|
