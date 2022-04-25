@@ -70,3 +70,119 @@ ll 与 ls -l 的作用是一样的，都是每个文件单独一行
 清空yum缓存目录：`yum clean all`
 
 生成yum元数据：`yum makecache`
+
+git好像就是ssh？
+
+```bash
+[root@openEuler-RISCV-rare zlib]# ls
+_service
+_service:tar_scm_kernel_repo:0001-Neon-Optimized-hash-chain-rebase.patch
+_service:tar_scm_kernel_repo:0002-Porting-optimized-longest_match.patch
+_service:tar_scm_kernel_repo:0003-arm64-specific-build-patch.patch
+_service:tar_scm_kernel_repo:0004-zlib-Optimize-CRC32.patch
+_service:tar_scm_kernel_repo:0005-Accelerate-Adler32-using-arm64-SVE-instructions.patch
+_service:tar_scm_kernel_repo:backport-0001-CVE-2018-25032.patch
+_service:tar_scm_kernel_repo:backport-0002-CVE-2018-25032.patch
+_service:tar_scm_kernel_repo:fix-undefined-buffer-detected-by-oss-fuzz.patch
+_service:tar_scm_kernel_repo:zlib-1.2.11-optimized-s390.patch
+_service:tar_scm_kernel_repo:zlib-1.2.11-SIMD.patch
+_service:tar_scm_kernel_repo:zlib-1.2.11.tar.xz
+_service:tar_scm_kernel_repo:zlib-1.2.5-minizip-fixuncrypt.patch
+_service:tar_scm_kernel_repo:zlib.spec
+_service:tar_scm_kernel_repo:zlib.yaml
+[root@openEuler-RISCV-rare zlib]#
+rm -f _service;
+for file in `ls | grep -v .osc`;
+do new_file=${file##*:};
+mv $file $new_file;
+done
+[root@openEuler-RISCV-rare zlib]# ls
+0001-Neon-Optimized-hash-chain-rebase.patch
+0002-Porting-optimized-longest_match.patch
+0003-arm64-specific-build-patch.patch
+0004-zlib-Optimize-CRC32.patch
+0005-Accelerate-Adler32-using-arm64-SVE-instructions.patch
+backport-0001-CVE-2018-25032.patch
+backport-0002-CVE-2018-25032.patch
+fix-undefined-buffer-detected-by-oss-fuzz.patch
+zlib-1.2.11-optimized-s390.patch
+zlib-1.2.11-SIMD.patch
+zlib-1.2.11.tar.xz
+zlib-1.2.5-minizip-fixuncrypt.patch
+zlib.spec
+zlib.yaml
+
+```
+
+```
+[root@openEuler-RISCV-rare zlib]# ls -a
+# 0001-Neon-Optimized-hash-chain-rebase.patch
+# 0002-Porting-optimized-longest_match.patch
+# 0003-arm64-specific-build-patch.patch
+# 0004-zlib-Optimize-CRC32.patch
+# 0005-Accelerate-Adler32-using-arm64-SVE-instructions.patch
+# backport-0001-CVE-2018-25032.patch
+# backport-0002-CVE-2018-25032.patch
+# fix-undefined-buffer-detected-by-oss-fuzz.patch
+# zlib-1.2.11-optimized-s390.patch
+# zlib-1.2.11-SIMD.patch
+# zlib-1.2.11.tar.xz
+# zlib-1.2.5-minizip-fixuncrypt.patch
+# zlib.spec
+# zlib.yaml
+
+[root@openEuler-RISCV-rare zlib]# ls grep .osc
+ls: cannot access 'grep': No such file or directory
+.osc:
+# 0001-Neon-Optimized-hash-chain-rebase.patch
+# 0002-Porting-optimized-longest_match.patch
+# 0003-arm64-specific-build-patch.patch
+# 0004-zlib-Optimize-CRC32.patch
+# 0005-Accelerate-Adler32-using-arm64-SVE-instructions.patch
+_apiurl
+# backport-0001-CVE-2018-25032.patch
+# backport-0002-CVE-2018-25032.patch
+_files
+# fix-undefined-buffer-detected-by-oss-fuzz.patch
+_meta
+_osclib_version
+_package
+_project
+# zlib-1.2.11-optimized-s390.patch
+# zlib-1.2.11-SIMD.patch
+# zlib-1.2.11.tar.xz
+# zlib-1.2.5-minizip-fixuncrypt.patch
+# zlib.spec
+# zlib.yaml
+
+```
+
+## 一些
+
+反引号括起来的命令是优先执行的
+
+ls 的 -R 指令递归地列出子文件夹中的文件
+
+变量初始化时不应加$
+变量名可以不加${}，只是防止引起歧义
+
+## 去除前缀
+
+例如现在目录下有两个文件`1:2:3:4:abc.txt`与`5:6:7:8:def.txt`，要想获得`abc.txt`与`def.txt`，可以这样写
+
+```bash
+for file in `ls`; do new_file=`echo ${file##*:}`; mv $file $new_file; done
+```
+
+这里需要注意的是`${file##*:}`意味着什么，我们可以先看去掉一个`#`的`$file#*:`，获得了`2:3:4:abc.txt`与`2:3:4:def.txt`文件，即`${var#prefix}`里去掉了`var`的`prefix`前缀，那么加两个`#`则可能使用贪心匹配
+
+## 三种包管理方式
+
+rpm、deb、pacman
+
+台湾那边把谷歌叫酷狗
+台湾那边的“阳春”是“质朴”的意思
+
+读一读《提问的智慧》
+
+也就是说sda是硬盘，sda1是分区

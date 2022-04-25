@@ -60,3 +60,7 @@ rdma
 ping在`iputils`里
 
 不响应ICMP
+
+reboot 会卡住，暂时不要用这种命令
+
+Special Interest Group SIG

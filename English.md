@@ -27,9 +27,12 @@
 |macros|宏|.n|
 |symposium|座谈会|.n|
 |circuits|电路|.n|
+|stuffed toy|毛绒玩具|.n|
 
 # 词组
 
 |英语简写|全称|汉语|备注|
 |:---|:---|:---|---|
 |ISCAS|International Symposium on Circuits and Systems|电路系统研讨会|
+|RHEL|Red Hat Enterprise Linux|红帽企业Linux操作系统|
+|MBR|Master Boot Record|主引导记录|

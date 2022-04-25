@@ -3,6 +3,52 @@
 
 ## 待分类
 
+### 关机与重启
+
+参考链接：
+
+1. [ACPI与UEFI - 知乎 - 老狼](https://zhuanlan.zhihu.com/p/25893464)
+2. [Linux 下 halt, poweroff, shutdown 有什么区别？ - 知乎](https://www.zhihu.com/question/22060662)
+3. [Linux 关机与重启命令 - 菜鸟教程](https://www.runoob.com/w3cnote/linux-shutdown-reboot.html)
+
+#### 直接关机
+
+`shutdown`实际上是调用`init 0`，`init 0`会做一些 cleanup 工作然后调用`halt`或`poweroff`，所以 `shutdown`需要**管理员**权限方能使用
+
+```bash
+shutdown -h now
+```
+
+`halt`会关闭OS，在不支持 ACPI 的机器上不会关闭电源
+
+```bash
+halt
+```
+
+`poweroff`在`halt`的基础上关闭电源，与`halt -p`的作用类似
+
+```bash
+poweroff
+```
+
+#### 定时关机
+
+10 **分钟**后自动关机
+
+```bash
+shutdown -h 10
+```
+
+100 **秒**后自动关机
+
+```bash
+shutdown -h -t 100
+```
+
+#### 重启
+
+使用`reboot`命令，或者使用`shutdown -r now`命令
+
 ### grep 多个关键字“与”和“或”
 
 #### 或操作
@@ -161,13 +207,13 @@ infinity@ubuntu:~$ /etc/init.d/ssh start   #启动服务
 
 [出处](https://askubuntu.com/questions/17299/what-do-the-different-colors-mean-in-ls)
 
-- Blue: Directory
-- Green: Executable or recognized data file
-- Cyan (Sky Blue): Symbolic link file
-- Yellow with black background: Device
-- Magenta (Pink): Graphic image file
-- Red: Archive file
-- Red with black background: Broken link
+* Blue: Directory
+* Green: Executable or recognized data file
+* Cyan (Sky Blue): Symbolic link file
+* Yellow with black background: Device
+* Magenta (Pink): Graphic image file
+* Red: Archive file
+* Red with black background: Broken link
 
 ### apt-get
 
