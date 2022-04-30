@@ -1,7 +1,151 @@
 
 # Linux学习
 
+## 各项命令
+
+### journalctl 命令
+
+**MARK**一下
+
+### man 命令
+
+在 man 里搜索，直接打`/`后接需要的内容，看情况需要转义
+
+### ping 命令
+
+ping在`iputils`里
+
+### nice 命令
+
+nice 被用来调整进程优先级，默认0；最小值-20，优先级最大；最大值19，优先级最小（也就是说补码被用在这儿了吗，也不对啊……）
+
+CPU密集型程序使用nice命令提高优先级会比较不错
+
+参考：[Linux nice及renice命令使用 - persistent_db - CSDN](https://blog.csdn.net/XD_hebuters/article/details/79619213)
+
+### find 命令
+
+find查找的是精确的名字，如果查找内容是文件名字的一部分，用*等
+
+### ls 命令
+
+`ls -l`可以简写为`ll`，`-h`人类可阅读模式，`-a`显示隐藏文件
+
+### tree 命令
+
+查看文件树，`-a`显示隐藏文件
+
+## 常用目录
+
+### 各个`bin`的区别
+
+出处：[Linux文件系统中/bin、/sbin、/usr/bin、/usr/sbin、/usr/local/bin、/usr/local/sbin文件夹的区别是什么？ - netcan - 知乎](https://www.zhihu.com/question/21265424/answer/94120935)
+
+`/bin`      This  directory contains executable programs which are needed in single user mode and to bring the system up or repair it.
+`/sbin`  Like  /bin, this directory holds commands needed to boot the system, but which are usually not executed by normal users.
+`/usr/bin`  This  is  the  primary directory for executable programs.  Most programs executed by normal users which are not needed for booting or for repairing the system and which are not installed  locally  should  be placed in this directory.
+`/usr/sbin` This directory contains program binaries for system administration which are not essential for the boot process, for mounting /usr, or for system repair.
+`/usr/local/bin` Binaries for programs local to the site.
+`/usr/local/sbin` Locally installed programs for system administration.
+
+翻译：
+
+`/bin` 包含了需要在单用户模式下运行的程序，例如
+
+`/sbin` 类似于`/bin`，这个文件夹包含启动系统的命令，但是通常不会让普通用户运行
+
+`/usr/bin` 存放可执行程序的主要文件夹。大多数不会用来启动或修复系统的，并且不会单独给某个用户安装的程序会放在这个文件夹
+
+`/usr/sbin` 这个文件夹包括了与启动进程、修复系统没什么关系的，仅能由管理员使用的程序
+
+`/usr/local/bin` 当前用户使用的二进制程序
+
+`/usr/local/sbin` 当前管理员使用的程序
+
+### `/usr`目录
+
+`bin` 用户常用命令存放目录
+
+`include` 程序头文件存放目录
+
+`lib` `lib64` 库文件存放目录
+
+`local` 用户自己安装的程序与编译完成的程序存放目录
+
+`share` 帮助文档与共享文档存放路径
+
+`src` 源码存放路径
+
+### `/usr/share`目录
+
+`doc`文档目录，软件的杂项文档说明
+
+`man`帮助文档目录
+
+### `/etc`目录
+
+`hosts` host table，主机表
+
+`resolv.conf` DNS配置文件
+
+`services` 端口、网络服务配置文件
+
 ## 待分类
+
+### 网卡重启
+
+centos7的网卡重启方法：systemctl restart network
+
+### 环境变量
+
+修改环境变量之后要`source .`一下
+
+`echo $PATH`或者`env`测试当前环境变量
+
+### 各种命令的风格
+
+GNU风格，\-字母，\-\-单词
+Unix风格，\-字母，\-单词
+BSD风格，没有\-
+
+### Linux 自启动程序的设置
+
+可以修改`/etc/rc.local`文件，也可以把bash文件放到`/etc/rc.d`中
+
+记得要`chmod +x [file]`赋予执行权限，包括`/etc/rc.local`文件
+
+### 分区建议
+
+BIOS
+
+|目录|建议大小|格式|描述|
+|---|---|---|---|
+|/|10G-20G|ext4|根目录|
+|swap|<2048M|swap|交换空间|
+|/boot|200M左右|ext4|Linux的内核及引导系统程序所需要的文件，比如 vmlinuz initrd.img文件都位于这个目录中。在一般情况下，GRUB或LILO系统引导管理器也位于这个目录；启动撞在文件存放位置，如kernels，initrd，grub。|
+|/tmp|5G左右|ext4|系统的临时文件，一般系统重启不会被保存。（建立服务器需要？）|
+|/home|尽量大些|ext4|用户工作目录；个人配置文件，如个人环境变量等；所有账号分配一个工作目录。|
+
+EFI
+
+|目录|建议大小|格式|描述|
+|---|---|---|---|
+|/boot/efi|>300M|fat32|efi分区，在有些系统上不能太小|
+|swap|见备注|swap|根据内存大小决定，若内存1G以内，建议用两倍内存容量；否则，建议用与内存相等的容量|
+|/|剩下的都是|懒人分区法，只要前两个没问题就行|
+
+记得要在 vmware 的设置中开启 uefi 启动
+
+### Linux 三种包管理方式
+
+rpm、deb、pacman
+
+deb：debian，ubuntu
+rpm：redhat，centOS, openSUSE
+pacman: archLinux
+
+rpm：Red Hat Package Manage
+RPM package manager
 
 ### 关机与重启
 
@@ -29,6 +173,12 @@ halt
 
 ```bash
 poweroff
+```
+
+还有一种关机方式
+
+```bash
+systemctl poweroff
 ```
 
 #### 定时关机
