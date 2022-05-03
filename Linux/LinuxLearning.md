@@ -5,7 +5,13 @@
 
 ### journalctl 命令
 
+直接跳到最后一页`-e`
+
 **MARK**一下
+
+### watch 命令
+
+时间间隔`-n [time]`
 
 ### man 命令
 

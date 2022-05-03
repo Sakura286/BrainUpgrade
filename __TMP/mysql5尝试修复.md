@@ -1,6 +1,8 @@
 
 # mySQL5 尝试修复
 
+mySQL版本 v5.7.37
+
 ## 错误内容
 
 第一次log结尾（2022.4.23）
@@ -67,6 +69,35 @@ unstable test `perfschema.func_file_io`
   - main.xa_prepared_binlog_off (第1次)
   - gis.gis_bugs_crashes (第2次)
   - perfschema.func_file_io (第2次)
+
+## 本地错误
+
+```log
+The servers were restarted 852 times
+Spent 93739.232 of 44269 seconds executing testcases
+
+Timeout: Failed 5/2512 tests, 99.80% were successful.
+
+Failing test(s): rpl.rpl_semi_sync_turn_on_off_optimize_for_static_plugin_config sys_vars.innodb_numa_interleave_basic
+
+Unstable test(s)(failures/attempts): rpl.rpl_row_img_idx_noblob(1/2) rpl.rpl_temporary_error_table_repository(1/2) rpl.rpl_test_framework(1/2)
+
+The log files in var/log may give you some hint of what went wrong.
+
+If you want to report this error, please read first the documentation
+at http://dev.mysql.com/doc/mysql/en/mysql-test-suite.html
+
+1668 tests were skipped, 290 by the test itself.
+
+Test suite timeout! Terminating...
+mysql-test-run: *** ERROR: Test suite aborted
+error: Bad exit status from /var/tmp/rpm-tmp.1Yx8DM (%check)
+
+
+RPM build errors:
+    %changelog not in descending chronological order
+    Bad exit status from /var/tmp/rpm-tmp.1Yx8DM (%check)
+```
 
 ## 详细文本查看
 

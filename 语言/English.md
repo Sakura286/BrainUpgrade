@@ -31,6 +31,9 @@
 |directive|指令|.n|
 |inhabit|居住，存在|.n|
 |exclusived|独家的|.adj|
+|superficially|表面上|.adv|
+|explicitly|明确地|.adv|
+|equivalent|相等的|.adj|
 
 ## 词组
 
