@@ -34,6 +34,7 @@
 |superficially|表面上|.adv|
 |explicitly|明确地|.adv|
 |equivalent|相等的|.adj|
+|concatenated|串联的|.adj|
 
 ## 词组
 
@@ -44,3 +45,4 @@
 |MBR|Master Boot Record|主引导记录|
 |NIC|Network Interface Card|网卡，网络适配器|
 |SIG|Special Interest Group|特殊兴趣小组|
+|Mutex|Mutually exclusive flag|互斥锁|
