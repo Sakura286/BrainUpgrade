@@ -1,10 +1,6 @@
 
 # 短期事项
 
-## 2022-05-03
-
-Today ToDo
-
 战略方向
 
 - 两个孩子顺利升学
@@ -12,6 +8,22 @@ Today ToDo
   - 直接要素：完成 pkg-fix 任务，获得工作
   - 长远1：理论基础——阅读技术书籍
   - 长远2：实践过程——参与项目，实际书写代码
+
+Medium Direction ( 3 days )
+
+- Finish Git Pro
+- Fix SCSI package(all steps)
+- Fix a new pac
+
+## 2022-05-04
+
+- Buy sth.
+  - Pork
+  - Vegetables
+  - Noodles
+  - Instant noodles
+- Find a way to submit SCSI pac
+- Reading Git Pro from Ch.3 to Ch.5
 
 ## 2022-05-03
 
