@@ -30,3 +30,7 @@
 - 学习systemd
 
 [可能是史上最全面易懂的 Systemd 服务管理教程！( 强烈建议收藏 )](https://cloud.tencent.com/developer/article/1516125)
+
+- try NoMachine
+
+- sed usage

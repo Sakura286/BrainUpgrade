@@ -24,18 +24,19 @@ Medium Direction ( 3 days )
 - Learn Pack
   - Learn Makefile ✊✊✊✊✊
   - Learn Spec
-- Git Pro reading
+- Git Pro reading ⚫
   - Ch.3
   - Ch.4
   - Ch.5
+- Configure CLion 🔵
 - Buy sth.
-  - Chicken wing
-  - Potato
-  - Red pepper
-  - Green pepper
+  - Chicken wing 🔵
+  - Potato 🔵
+  - Red pepper 🔵
+  - Green pepper 🔵
 - Cook
-  - 青椒土豆丝
-  - 可乐鸡翅
+  - 青椒土豆丝 🔵
+  - 可乐鸡翅 🔵
 
 ## 2022-05-04
 
