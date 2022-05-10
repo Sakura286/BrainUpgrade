@@ -35,6 +35,13 @@
 |explicitly|明确地|.adv|
 |equivalent|相等的|.adj|
 |concatenated|串联的|.adj|
+|comprise|由……组成|.v|
+|elapse|时间流逝|.v|
+|supervise|监督，管理|.v|
+|generic|通用的|.adj|
+|respective|各自的|.adj|
+|consecutive|连续的|.adj|
+|emit|发射|.v|
 
 ## 词组
 

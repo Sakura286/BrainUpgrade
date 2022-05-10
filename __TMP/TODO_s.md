@@ -15,15 +15,37 @@ Medium Direction ( 3 days )
 - Fix SCSI package(all steps)
 - Fix a new pac
 
+## 2022-05-05
+
+- Fix swptm
+  - Read dnf-automatic manual 🔵
+  - Know about systemd 🔵
+  - Stucked here 🔴
+- Learn Pack
+  - Learn Makefile ✊✊✊✊✊
+  - Learn Spec
+- Git Pro reading
+  - Ch.3
+  - Ch.4
+  - Ch.5
+- Buy sth.
+  - Chicken wing
+  - Potato
+  - Red pepper
+  - Green pepper
+- Cook
+  - 青椒土豆丝
+  - 可乐鸡翅
+
 ## 2022-05-04
 
 - Buy sth.
-  - Pork
-  - Vegetables
-  - Noodles
-  - Instant noodles
-- Find a way to submit SCSI pac
-- Reading Git Pro from Ch.3 to Ch.5
+  - Pork ×
+  - Vegetables ×
+  - Noodles √
+  - Instant noodles ×
+- Find a way to submit SCSI pac × It has been fixed.
+- Reading Git Pro from Ch.3 to Ch.5 × No time
 
 ## 2022-05-03
 
@@ -39,8 +61,6 @@ Medium Direction ( 3 days )
   - 蔬菜
   - 火腿肠
   - 面包
-
-
 
 ## 2022-04-30
 

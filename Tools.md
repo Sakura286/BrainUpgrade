@@ -1,5 +1,9 @@
 # 工具软件的用法
 
+## Tabby
+
+A terminal emulator which is very beautiful.
+
 ## CLion
 
 多光标的使用快捷键是 `alt` + `shift` ;
