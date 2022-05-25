@@ -34,3 +34,29 @@
 - try NoMachine
 
 - sed usage
+
+- Linux share file / umask / SGID & SUID
+
+- osc command
+
+- use bash script to solve common program problems for starters
+
+- Enhance telegram pic viewer. #telegram #qt
+
+- What does **rt** means? What's the difference beetween them? #virtualbox
+
+- 边际成本学习
+
+- 啥叫“自动化测试回归”？？
+
+- 啥叫“灰度环境”
+
+- 啥叫“测试的充分性要求”？
+
+- 软件工程的书
+
+- 剽窃 kate 对 markdown 里 bash 代码块及 spec 文件的高亮支持
+
+- **oerv** 可以完善[官方的sig页面](https://www.openeuler.org/zh/sig/sig-list/sig-detail.html?id=43&name=sig-RISC-V&mail=dev%40openeuler.org)
+
+- 个人建站

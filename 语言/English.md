@@ -42,6 +42,7 @@
 |respective|各自的|.adj|
 |consecutive|连续的|.adj|
 |emit|发射|.v|
+|concatenate|连接|.v|
 
 ## 词组
 

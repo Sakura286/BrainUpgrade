@@ -1,7 +1,30 @@
 
 # Linux学习
 
+[TOC]
+
+## 仓库与打包
+
+### pacman & yay
+
+`-Ss`: search in the repo
+`-S`: install package from repo
+`-Sc`: clean cache
+`-R`: remove package
+`-U`: install package from file
+
+### apt
+
+### dpkg
+
+`-i`: install
+`-I`: list info of the package
+
 ## 各项命令
+
+### uptime 命令
+
+显示开机时间、自开机时间已经多久了等内容
 
 ### journalctl 命令
 
@@ -36,6 +59,8 @@ find查找的是精确的名字，如果查找内容是文件名字的一部分�
 ### ls 命令
 
 `ls -l`可以简写为`ll`，`-h`人类可阅读模式，`-a`显示隐藏文件
+
+`-F`选项可以在文件名称后标注文件类型，`/`是文件夹，`*`是可执行文件，`@`是软链接（并不会区分指向的到底是文件还是文件夹）
 
 ### tree 命令
 
@@ -97,6 +122,81 @@ find查找的是精确的名字，如果查找内容是文件名字的一部分�
 `services` 端口、网络服务配置文件
 
 ## 待分类
+
+### VMWare
+
+#### ERROR: Could not open /dev/vmmon
+
+```log
+Could not open /dev/vmmon: No such file or directory. Please make sure that the kernel module `vmmon’ is loaded.
+```
+
+I do not know on which step I solved the problem, here is som links.
+
+[Package Details: vmware-workstation 16.2.3-2](https://aur.archlinux.org/packages/vmware-workstation)
+[Could not open /dev/vmmon](https://forum.manjaro.org/t/could-not-open-dev-vmmon/21431)
+[VMWare installation on Arch Linux](https://unix.stackexchange.com/questions/347599/vmware-installation-on-arch-linux)
+[VMware - ArchWiki](https://wiki.archlinux.org/title/VMware#systemd_services)
+[systemd - ArchWiki](https://wiki.archlinux.org/title/Systemd#Using_units)
+[\[Solved\] /usr/lib/systemd/scripts/vmware doesn't exist](https://bbs.archlinux.org/viewtopic.php?id=256825)
+
+### VirtualBox
+
+#### Kernel driver not installed (rc=-1908)
+
+```log
+Kernel driver not installed (rc=-1908)
+
+The VirtualBox Linux kernel driver is either not loaded or not set up correctly. Please try setting it up again by executing
+
+‘/sbin/vboxconfig’
+
+as root.
+
+If your system has EFI Secure Boot enabled you may also need to sign the kernel modules (vboxdrv, vboxnetflt, vboxnetadp, vboxpci) before you can load them. Please see your Linux system’s documentation for more information.
+```
+
+My kernel version is 5.15.38-1. I installed `linux515-rt-virtualbox-host-modules`( which is a **WRONG** pack ) rather than `linux515-virtualbox-host-modules`.
+
+**TODO**: What does **rt** means? What's the difference beetween them?
+
+reference link [here](https://forum.manjaro.org/t/virtualbox-error/16780)
+
+### 从tar.gz包中安装程序
+
+总的来说分三部分：
+
+- 程序的文件存放在/opt
+- 程序的可执行文件链接至/bin以便使用命令执行
+- 程序的.desktop文件存放在/usr/share/application里，以创建桌面快捷方式
+
+以discord为例，[参考链接](https://itsfoss.com/install-discord-linux/#traditional-method)
+
+#### 1. 将文件解压至/opt
+
+```bash
+sudo tar -xzf discord-0.0.xx.tar.gz -C /opt
+```
+
+其中，-C选项指定了解压位置
+
+#### 2. 将可执行程序链接至/usr/bin
+
+```bash
+sudo ln -sf /opt/Discord/Discord /usr/bin/Discord
+```
+
+#### 3. 创建桌面入口
+
+```bash
+sudo cp -r /opt/Discord/discord.desktop /usr/share/applications
+```
+
+需要编辑discord.desktop。尤其注意`Exec`字段要指向刚才的软连接；`Icon`字段可以指向/opt安装目录内的ico文件，或者仿照一下其他.desktop文件的处理方式
+
+#### 楷の指示
+
+> 对于这种不需要管理员权限的程序，你可以将程序放到 ~/ ($HOME) 下的某个目录，然后链接其中的二进制文件到 ~/.local/bin 这个地方（ ~/.local/bin 需要事先添加到 $PATH 里）。至于 .desktop 文件，应该放到 ~/.local/share/applications 里。
 
 ### 网卡重启
 

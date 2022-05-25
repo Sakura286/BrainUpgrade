@@ -9,15 +9,39 @@
   - 长远1：理论基础——阅读技术书籍
   - 长远2：实践过程——参与项目，实际书写代码
 
-Medium Direction ( 3 days )
+## 2022-05-14
 
-- Finish Git Pro
-- Fix SCSI package(all steps)
-- Fix a new pac
+- Learn Pack
+  - Read Makefile
+- Learn Shell uncarefully
+  - Ch.12 ~ 13
+  - Ch.14 ~ 15
+  - Ch.16 ~ 17
+  - Ch.18 ~ 19
+- Emulate Windows 10 on Virtual box
+  - Try using command-line to run QEMU
 
-## 2022-05-05
+## 2022-05-12
 
-- Fix swptm
+- Ask Wuwei √
+
+## 2022-05-11
+
+- Learn Pack
+  - Learn Makefile √
+  - Learn Cmake ×
+  - Learn Spec ×
+- Learn Shell
+  - Ch.5 √
+  - Ch.6 √
+  - Ch.7 √
+  - Ch.8 √
+  - Ch.9 ×
+  - Ch.10 √
+
+## 2022-05-10
+
+- Fix swptm 
   - Read dnf-automatic manual 🔵
   - Know about systemd 🔵
   - Stucked here 🔴
