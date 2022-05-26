@@ -5,7 +5,7 @@
 
 use `ctrl`+`alt`+`esc` to kill a graphic process
 
-```bash
+```console
 kstart plasmashell #to restart it
 ```
 
@@ -14,11 +14,11 @@ Refference:
 
 ## Add Desktop Widget
 
-```bash
+```console
 plasmapkg2 -u widget-file-name.plasmoid
 ```
 
-```bash
+```console
 kpackagetool5 -i file-name.tar.gz
 ```
 
@@ -31,3 +31,15 @@ man: can't set the locale; make sure $LC_* and $LANG are correct
 Adjust Format from default to a specific region in system settings, and it works.
 
 ## yay & pacman
+
+## desktop crash
+
+After running 3d program, the desktop crashed.
+
+It's not KDE's fault. Just latte crashed. So what I need to do is **kill latte and restart it**.
+
+```console
+$ ps -Al | grep latte
+$ kill xxxx
+$ latte-dock
+```

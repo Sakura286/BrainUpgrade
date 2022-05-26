@@ -36,7 +36,6 @@ for file in `ls`; do new_file=`echo ${file##*:}`; mv $file $new_file; done
 
 ```bash
 file="/dir1/dir2/dir3/myfile.txt"
-
 ```
 
 #### `${:}`与`${::}`

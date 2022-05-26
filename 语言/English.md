@@ -43,6 +43,7 @@
 |consecutive|连续的|.adj|
 |emit|发射|.v|
 |concatenate|连接|.v|
+|malicious|有害的|.adj|
 
 ## 词组
 
