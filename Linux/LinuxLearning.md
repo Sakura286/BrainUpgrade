@@ -3,6 +3,10 @@
 
 [TOC]
 
+## python
+
+```python3 -m http.server 25565```可以这样
+
 ## 仓库与打包
 
 ### pacman & yay
@@ -21,6 +25,22 @@
 `-I`: list info of the package
 
 ## 各项命令
+
+### sudo command
+
+`-E` to use the environment of current user
+
+### lspci command
+
+list all pci devices ( such as dedicated graphic card )
+
+use `sudo lspci -v`
+
+`sudo` is used to avoid output listed:
+
+```console
+Capabilities: <access denied>
+```
 
 ### uptime 命令
 

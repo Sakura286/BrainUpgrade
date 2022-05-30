@@ -31,3 +31,6 @@ osc meta prj -e
 
 echo ".osc/" >> .git/info/exclude
 
+## .osc
+
+只需要有.osc文件夹，就可以osc build本地构建，构建前记得osc meta proj -e 插入 build-disable（前文）

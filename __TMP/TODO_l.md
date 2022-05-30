@@ -60,3 +60,5 @@
 - **oerv** 可以完善[官方的sig页面](https://www.openeuler.org/zh/sig/sig-list/sig-detail.html?id=43&name=sig-RISC-V&mail=dev%40openeuler.org)
 
 - 个人建站
+
+- 用随机数生成文件名，并且与当前已有文件不冲突（模仿mktemp命令）
