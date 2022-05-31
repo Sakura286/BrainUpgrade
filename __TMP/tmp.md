@@ -1,6 +1,32 @@
 
 # some temp memo
 
+## 5-12 Shell script: write an auto-backup shell script for Minecraft backup
+
+usage: `local-backup.sh -p <preffix> <file1> <file2> <file3> ...`
+
+output name: `<preffix>-<date>-<time>-<sha256preffix>.tar.xz`, such as `minecraft-20220526-0739-xxxxxxxxx.tar.xz`
+
+todo:
+
+- [x] get the preffix - default is the name of the parent folder
+- [x] generate time and convert it to suitable format
+- [x] choose a compress method/suffix
+- [x] check whether the file exist
+- [x] compress to a file - generate filename with 'mktemp'
+- [x] calc sha256 and rename it
+- [x] add `--help`, and usage prompt
+
+optional:
+
+- [x] backup regularly
+- [ ] check whether the file updated, if not, stop archive
+- [ ] upload the file to Telegram channel
+
+## English
+
+contact **with** sb.
+
 ## 测试岗位信息搜索
 
 ## 从零开始学测试

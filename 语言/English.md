@@ -44,6 +44,10 @@
 |emit|发射|.v|
 |concatenate|连接|.v|
 |malicious|有害的|.adj|
+|implement|实现|.v|
+|prefix|前缀|.n|
+|suffix|后缀|.n|
+
 
 ## 词组
 
@@ -55,3 +59,5 @@
 |NIC|Network Interface Card|网卡，网络适配器|
 |SIG|Special Interest Group|特殊兴趣小组|
 |Mutex|Mutually exclusive flag|互斥锁|
+||dedicated card|独立显卡|
+||integrated card|集成显卡|

@@ -143,6 +143,10 @@ find查找的是精确的名字，如果查找内容是文件名字的一部分�
 
 ## 待分类
 
+### tmux
+
+tmux翻页：`ctrl`+`b`后，按`PgUp`或`PgDown`
+
 ### VMWare
 
 #### ERROR: Could not open /dev/vmmon
