@@ -15,6 +15,7 @@
 - [ ] 🔨 Fix blur bug in VSCode
 - [ ] 🔡 Shell script: write a script that implement the `mktemp` function
 - [ ] 📔 Read one Japanese article
+- [ ] 🚮 Clean up the room
 
 ## 5-31
 
@@ -40,5 +41,5 @@
 - [x] Restore the server of Kai on my own machine
 - [x] Enable blur of VSCode.
     Reached the target, some bugs to fix:
-    - [ ] Start program pinned in the dock will not run plasma-blur.sh
-    - [ ] When drag a Edge tag to create a new window, the blur effect deactivated.
+    Start program pinned in the dock will not run plasma-blur.sh
+    When drag a Edge tag to create a new window, the blur effect deactivated.

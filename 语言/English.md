@@ -47,7 +47,8 @@
 |implement|实现|.v|
 |prefix|前缀|.n|
 |suffix|后缀|.n|
-
+|newbie|新手|.n|
+|elevation|提权；海拔|.n|
 
 ## 词组
 
@@ -61,3 +62,4 @@
 |Mutex|Mutually exclusive flag|互斥锁|
 ||dedicated card|独立显卡|
 ||integrated card|集成显卡|
+||umbrella term|总称|

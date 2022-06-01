@@ -26,6 +26,10 @@
 
 ## 各项命令
 
+### top command
+
+top命令查看的cpu占用可能超过100%，因为显示的并不是整个CPU的利用率，按`1`可以查看各个CPU的占用情况
+
 ### sudo command
 
 `-E` to use the environment of current user
