@@ -1,6 +1,25 @@
 
 # some temp memo
 
+## 6-2
+
+base-devel还没加进去
+
+我这边在x86 manjaro上编译通过了libreoffice，现在正在看怎么用makepkg编译打包
+
+写一个脚本，可以将文件添加进我的github临时仓库，并返回该文件的链接
+
+./external/tarballs
+
+wget -r --level=1 -nd -P ./external/tarballs https://go.suokunlong.cn:88/dl/libreoffice/external_tarballs/
+
+error: failed to init transaction (unable to lock database)
+error: could not lock database: File exists
+  if you're sure a package manager is not already
+  running, you can remove /var/lib/pacman/db.lck
+
+不能在pacman安装程序的时候运行另外一个pacman安装程序，否则会报这样的错误
+
 ## 5-12 Shell script: write an auto-backup shell script for Minecraft backup
 
 usage: `local-backup.sh -p <preffix> <file1> <file2> <file3> ...`

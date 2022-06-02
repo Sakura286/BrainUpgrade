@@ -18,3 +18,7 @@ configure 需要通过 pkg-config 来检查依赖
 ## 解决方法
 
 已经安装了 libarchive ，但是`pkg-config --list-all | grep libarchive`并没有出现 libarchive，安装 libarchive-devel 后解决
+
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS=@im=fcitxdfd发达发达
