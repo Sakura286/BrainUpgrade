@@ -1,21 +1,33 @@
 
 # Kou no shigoto
 
+## 6-4
+
+- [ ] 🏥 Get physical check report
+- [ ] 🏥 Do neucleic acid test
+- [ ] 🏥 Withdraw money from the hospital
+- [ ] 🔡 PKGBUILD file v2.0
+- [ ] 📲 Contact with mom
+- [ ] ⭐ Choose the next present for her
+- [ ] 📔 Read one Japanese article
+- [ ] 🚮 Clean up the **room**
+- [ ] 🎽 Wash my clothes
+- [ ] 📝 Write memo of vscode blur
+
 ## 6-1
 
-- [ ] ⭐ Pack and send present to that child
-  - [ ] Receive package
-  - [ ] Buy some sugar
-  - [ ] Send it
-- [ ] ⭐ Do a physical Examination and send the result to HR
-- [ ] 🔡 Shell script: restore from latte crash
+- [x] ⭐ Pack and send present to that child
+  - [x] Receive package
+  - [x] Buy some sugar
+  - [x] Send it
+- [x] ⭐ Do a physical Examination
+~~- [ ] 🔡 Shell script: restore from latte crash~~(outdated)
 - [ ] 🔨 Enable detatching running mode for docker by compose file
 - [ ] 🔨 Enable the dedicated card in Minecraft
 - [ ] 🔨 mod for Minecraft - both server and client
-- [ ] 🔨 Fix blur bug in VSCode
+~~- [ ] 🔨 Fix blur bug in VSCode~~(outdated)
 - [ ] 🔡 Shell script: write a script that implement the `mktemp` function
-- [ ] 📔 Read one Japanese article
-- [ ] 🚮 Clean up the room
+
 
 ## 5-31
 

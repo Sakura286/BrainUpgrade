@@ -1,6 +1,57 @@
 
 # some temp memo
 
+## 6-3
+
+https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=lightlyshaders-git
+
+	 # TODO:
+	 # 1. see how to use variable in sed
+	 # 2. know more about the .desktop group of libreoffice
+
+sudo rejects password that is correct when using yay to build
+
+<!-- referrence:[sudo rejects password that is correct](https://serverfault.com/questions/424775/sudo-rejects-password-that-is-correct) -->
+
+查看systemd-homed，发现这个进程死掉了
+
+```console
+$ systemctl status systemd-homed
+○ systemd-homed.service - Home Area Manager
+     Loaded: loaded (/usr/lib/systemd/system/systemd-homed.service; disabled; vendor preset: enabled)
+     Active: inactive (dead)
+       Docs: man:systemd-homed.service(8)
+             man:org.freedesktop.home1(5)
+```
+
+重启该服务
+
+```console
+$ systemctl start systemd-homed
+```
+
+然后查看systemd-homed，没问题了
+
+```console
+$ systemctl status systemd-homed
+● systemd-homed.service - Home Area Manager
+     Loaded: loaded (/usr/lib/systemd/system/systemd-homed.service; disabled; vendor preset: enabled)
+     Active: active (running) since Fri 2022-06-03 11:32:05 CST; 2s ago
+       Docs: man:systemd-homed.service(8)
+             man:org.freedesktop.home1(5)
+   Main PID: 557487 (systemd-homed)
+     Status: "Processing requests..."
+      Tasks: 1 (limit: 19033)
+     Memory: 1.3M
+        CPU: 23ms
+     CGroup: /system.slice/systemd-homed.service
+             └─ 557487 /usr/lib/systemd/systemd-homed
+
+6月 03 11:32:05 infinity-mi systemd[1]: Starting Home Area Manager...
+6月 03 11:32:05 infinity-mi systemd-homed[557487]: Watching /home.
+6月 03 11:32:05 infinity-mi systemd[1]: Started Home Area Manager.
+```
+
 ## 6-2
 
 base-devel还没加进去

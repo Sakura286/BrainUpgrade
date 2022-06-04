@@ -38,10 +38,10 @@ After running 3d program, the desktop crashed.
 
 It's not KDE's fault. Just latte crashed. So what I need to do is **kill latte and restart it**.
 
-```console
-$ ps -Al | grep latte
-$ kill xxxx
-$ latte-dock
+```bash
+ps -Al | grep latte
+kill xxxx
+latte-dock
 ```
 
 ## input method
