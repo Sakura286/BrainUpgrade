@@ -41,7 +41,7 @@
 
 ## 2022-05-10
 
-- Fix swptm 
+- Fix swptm
   - Read dnf-automatic manual 🔵
   - Know about systemd 🔵
   - Stucked here 🔴
@@ -115,7 +115,7 @@
 
 - 大致分清楚mysql spec文件的分块情况
 
--  了解mysql make文件情况
+- 了解mysql make文件情况
 - 定位出错点
 
 - 了解cmake文件在做什么

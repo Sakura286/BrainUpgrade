@@ -28,7 +28,6 @@
 ~~- [ ] 🔨 Fix blur bug in VSCode~~(outdated)
 - [ ] 🔡 Shell script: write a script that implement the `mktemp` function
 
-
 ## 5-31
 
 - [x] Shell script: write an auto-backup shell script for Minecraft backup

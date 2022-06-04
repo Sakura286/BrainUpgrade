@@ -3,11 +3,12 @@
 
 ## 6-3
 
-https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=lightlyshaders-git
+Refer:[lightlyshaders - aur](https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=lightlyshaders-git)
 
-	 # TODO:
-	 # 1. see how to use variable in sed
-	 # 2. know more about the .desktop group of libreoffice
+TODO:
+
+1. see how to use variable in sed
+2. know more about the .desktop group of libreoffice
 
 sudo rejects password that is correct when using yay to build
 
@@ -27,7 +28,7 @@ $ systemctl status systemd-homed
 重启该服务
 
 ```console
-$ systemctl start systemd-homed
+systemctl start systemd-homed
 ```
 
 然后查看systemd-homed，没问题了
@@ -62,7 +63,7 @@ base-devel还没加进去
 
 ./external/tarballs
 
-wget -r --level=1 -nd -P ./external/tarballs https://go.suokunlong.cn:88/dl/libreoffice/external_tarballs/
+`wget -r --level=1 -nd -P ./external/tarballs https://go.suokunlong.cn:88/dl/libreoffice/external_tarballs/`
 
 error: failed to init transaction (unable to lock database)
 error: could not lock database: File exists
@@ -443,8 +444,6 @@ I need to learn `Makefile` and `Spec` again.
 > before userbuild
 
 ## to see the packing process
-
-
 
 ## add dnf-automatic to obs
 

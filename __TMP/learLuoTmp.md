@@ -13,7 +13,7 @@ git format-patch HEAD^^ 最近的二个patch内容
 git format-patch -1
 git format-patch -2
 
-## 问题：
+## 问题
 
 "/lib/cpp" fails sanity check
 
@@ -22,12 +22,15 @@ git format-patch -2
 osc build --no-verify
 
 osc meta prj -e
+
+```xml
 #节省worker资源
 #在末尾</project>之前插入
   <build>
     <disable/>
   </build>
 #以禁止整个项目的在线构建
+```
 
 echo ".osc/" >> .git/info/exclude
 
