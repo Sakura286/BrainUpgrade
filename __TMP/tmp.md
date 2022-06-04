@@ -1,6 +1,44 @@
 
 # some temp memo
 
+## 6-4
+
+ventoy真是个好东西……记得复制完ISO后sync一下
+
+搞明白 tarsier 在搞哪些发行版
+
+arise issue
+
+解释了debian，debian port，debian port for RISC-V 这些明此款
+`https://riscv.org/wp-content/uploads/2016/07/Wed1115_Working_Towards_a_Debian_RISC-V_Port.pdf`
+
+Arch官方的PKGBUILD里把link time optimization禁用了，我不知道这是个什么东西，先把一些链接拿上来
+`https://www.its203.com/article/qq_36287943/103681797`
+`https://blog.csdn.net/qq_36287943/article/details/103930336`
+`https://zhuanlan.zhihu.com/p/384160632`
+`https://www.jianshu.com/p/58fef052291a`
+
+`source=('directory::url#fragment?query')`
+
+`directory` 要克隆下来的名字
+`url` 格式其实是`vcs+url`其中vcs是版本控制器的名字，比如git
+`fragment` 要采用哪个分支/提交/标签，例如`branch=master`
+
+PGP（商业） GPG（开源）
+`https://zh.wikipedia.org/zh-hans/PGP`
+
+Arch Linux 打包的相关链接
+
+`https://wiki.archlinux.org/title/Makepkg_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)`
+`https://wiki.archlinux.org/title/PKGBUILD_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)`
+`https://wiki.archlinux.org/title/Creating_packages_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)`
+`https://man.archlinux.org/man/PKGBUILD.5`
+`https://wiki.archlinux.org/title/VCS_package_guidelines`
+
+libreoffice除了主程序core（256M左右）之外，还有子模块字典（dictionaries 51M）、帮助（help 110M）、翻译（translations 196M）
+
+每次更新的log可以在`https://dev-builds.libreoffice.org/pre-releases/src/`看
+
 ## 6-3
 
 Refer:[lightlyshaders - aur](https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=lightlyshaders-git)

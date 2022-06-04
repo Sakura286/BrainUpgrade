@@ -1,18 +1,20 @@
 
 # Kou no shigoto
 
-## 6-4
+## 6-4 a day to memory
 
-- [ ] 🏥 Get physical check report
-- [ ] 🏥 Do neucleic acid test
+- [x] 🏥 Get physical check report
+- [x] 🏥 Do neucleic acid test
 - [ ] 🏥 Withdraw money from the hospital
 - [ ] 🔡 PKGBUILD file v2.0
 - [ ] 📲 Contact with mom
 - [ ] ⭐ Choose the next present for her
 - [ ] 📔 Read one Japanese article
-- [ ] 🚮 Clean up the **room**
+- [x] 🚮 Clean up the **room**
 - [ ] 🎽 Wash my clothes
 - [ ] 📝 Write memo of vscode blur
+- [x] ⬆️ Make a backup of Dufu-poetry comment
+- [ ] 📝 Update an article of Dufu-poetry comment
 
 ## 6-1
 

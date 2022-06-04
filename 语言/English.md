@@ -49,6 +49,7 @@
 |suffix|后缀|.n|
 |newbie|新手|.n|
 |elevation|提权；海拔|.n|
+|trunk|主干|.n|
 
 ## 词组
 
