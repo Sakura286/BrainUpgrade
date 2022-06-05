@@ -147,6 +147,41 @@ find查找的是精确的名字，如果查找内容是文件名字的一部分�
 
 ## 待分类
 
+### grub 挂了该怎么办
+
+折腾分区复制或者是和windows的双系统的时候grub经常会挂掉，开机grub就处在recovery模式
+
+可以使用U盘安装盘来修复[How can I repair grub? (How to get Ubuntu back after installing Windows?)](https://askubuntu.com/questions/88384/how-can-i-repair-grub-how-to-get-ubuntu-back-after-installing-windows)
+
+但也可以直接在recovery里操作
+
+#### 1. 在recovery里启动机器
+
+首先像这样`ls (hd0,gpt1)`挨个访问磁盘分区，直到不报`unknown filesystem`错误为止；也可以`ls (hd0,gpt1)/`（注意斜杠），直到能列出某个目录
+
+换句话说，这样做的目的是确定linux安装在哪个盘上
+
+接下来设定
+
+```shell
+root=(hd0,gpt1) #使用刚才找到的分区
+prefix=/boot/grub
+insmod normal #install-mod
+normal
+```
+
+这样系统会正常启动
+
+#### 2. 修grub
+
+用`fdisk -l`确定好/boot挂载在哪个分区后，以管理员权限执行如下命令
+
+```shell
+grub-install /dev/sda #重装一遍grub，设备名用刚才找到的
+update-grub #让grub找到其他系统，比如windows等
+```
+
+
 ### tmux
 
 tmux翻页：`ctrl`+`b`后，按`PgUp`或`PgDown`

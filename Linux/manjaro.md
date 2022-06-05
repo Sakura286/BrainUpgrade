@@ -83,3 +83,15 @@ Reference from [How do I toggle to katakana input from hiragana with fcitx-mozc 
 
 `ctrl`+`shift`, switch between Chinese and Japanese IME
 `ctrl`+`space`, switch between English and Japanese(maybe fcitx) IMe
+
+## KDE Connect problem
+
+Both PC and phone cannot detect each other.
+
+On PC(wireless), the phone can be detected with nmap command, but cannot ping the phone.
+On phone, the PC(wireless) cannot be detected with pingtool, and ping neither not work.
+But they can both connect to the PC(wired).
+
+I find out probably it is [router's problem](https://blog.csdn.net/longlc123/article/details/80949053)
+
+Finaly I stopped `NAT acceleration` in `LAN` -> `switch control` of the Management Page(Merlin) of the Router

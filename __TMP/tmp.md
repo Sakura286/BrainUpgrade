@@ -3,6 +3,21 @@
 
 ## 6-4
 
+[infinity-mi infinity]# update-grub
+Generating grub configuration file ...
+Found theme: /usr/share/grub/themes/manjaro/theme.txt
+Found linux image: /boot/vmlinuz-5.15-x86_64
+Found initrd image: /boot/intel-ucode.img /boot/initramfs-5.15-x86_64.img
+Found initrd fallback image: /boot/initramfs-5.15-x86_64-fallback.img
+Warning: os-prober will be executed to detect other bootable partitions.
+Its output will be used to detect bootable binaries on them and create new boot entries.
+Found Windows Boot Manager on /dev/nvme0n1p1@/EFI/Microsoft/Boot/bootmgfw.efi
+Adding boot menu entry for UEFI Firmware Settings ...
+Found memtest86+ image: /boot/memtest86+/memtest.bin
+/usr/bin/grub-probe: warning: unknown device type nvme0n1.
+done
+
+
 ventoy真是个好东西……记得复制完ISO后sync一下
 
 搞明白 tarsier 在搞哪些发行版
