@@ -1,6 +1,36 @@
 
 # some temp memo
 
+## 6-6
+
+不能在数组里用变量？
+
+## 6-5
+
+fakeinstall时，perl会报错，找不到destdir，先尝试把--enable-split-app-modules关掉再说
+--> 不行
+--> 但是找到了问题所在：特么的用了相对路径~
+
+发现自己电脑的makeflag是j9……八个任务在做然后另外一个任务在外面等待？
+
+可以从autogen.sh中学习怎么写帮助
+
+TDF: the document foundation
+
+下载的这些额外文件都是什么？
+
+从哪里找校验的MD5？
+
+GPG check是不是要学习一下？
+
+创建软链接时出错也会使得makepkg停下来
+
+了解makepkg的一些参数
+
+patch -p1
+
+p后面的参数可以忽略掉patch里面前x层的目录
+
 ## 6-4
 
 [infinity-mi infinity]# update-grub
@@ -16,7 +46,6 @@ Adding boot menu entry for UEFI Firmware Settings ...
 Found memtest86+ image: /boot/memtest86+/memtest.bin
 /usr/bin/grub-probe: warning: unknown device type nvme0n1.
 done
-
 
 ventoy真是个好东西……记得复制完ISO后sync一下
 

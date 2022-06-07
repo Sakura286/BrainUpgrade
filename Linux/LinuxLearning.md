@@ -26,6 +26,21 @@
 
 ## 各项命令
 
+### pushd popd cd
+
+pushd 把当前目录压栈并跳转到目的目录
+popd 将栈中目录弹出并跳转到该目录
+
+```console
+[root@shit ~/Desktop/test]$ pushd ~
+~ ~/Desktop/test
+
+[~]$ popd
+~/Desktop/test
+
+[~/Desktop/test]$
+```
+
 ### top command
 
 top命令查看的cpu占用可能超过100%，因为显示的并不是整个CPU的利用率，按`1`可以查看各个CPU的占用情况

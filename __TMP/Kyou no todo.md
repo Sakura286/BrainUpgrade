@@ -1,24 +1,39 @@
 
 # Kou no shigoto
 
+## todo-short
+
+- [ ] 🎽 Wash my clothes
+- [ ] 🏥 Withdraw money from the hospital
+
+## 6-7
+
+- [ ] 🧱 Carry Brick
+  - [ ] 🧑‍💼 Read coworker's work centent on Debian RISC-V port
+  - [ ] 📓 Learn docker
+  - [ ] 📓 Read Essential Scrum
+- [ ] ⭐ Choose the next present for that kid
+- [ ] 📔 Read one Japanese article
+- [ ] 📝 Update an article of Dufu-poetry comment
+
+## 6-6
+
+- [x] 🧱 Carry Brick
+  - [x] 🔡 PKGBUILD file v2.0
+  - [x] ⭐ Send physical check report to HR
+
 ## 6-4 a day to memory
 
 - [x] 🏥 Get physical check report
 - [x] 🏥 Do neucleic acid test
-- [ ] 🏥 Withdraw money from the hospital
-- [ ] 🔡 PKGBUILD file v2.0
-- [ ] 📲 Contact with mom
-- [ ] ⭐ Choose the next present for her
-- [ ] 📔 Read one Japanese article
-- [x] 🚮 Clean up the **room**
-- [ ] 🎽 Wash my clothes
-- [ ] 📝 Write memo of vscode blur
+- [x] 📲 Contact with mom
+- [x] 🚮 Clean up the **room** ~SOOOOON~
 - [x] ⬆️ Make a backup of Dufu-poetry comment
-- [ ] 📝 Update an article of Dufu-poetry comment
+- [x] 📝 Update an article of Dufu-poetry comment
 
 ## 6-1
 
-- [x] ⭐ Pack and send present to that child
+- [x] ⭐ Pack and send present to that kid
   - [x] Receive package
   - [x] Buy some sugar
   - [x] Send it

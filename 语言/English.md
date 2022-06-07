@@ -50,6 +50,7 @@
 |newbie|新手|.n|
 |elevation|提权；海拔|.n|
 |trunk|主干|.n|
+|mainfesto|宣言|.n|
 
 ## 词组
 
@@ -64,3 +65,10 @@
 ||dedicated card|独立显卡|
 ||integrated card|集成显卡|
 ||umbrella term|总称|
+|TDF|the document foundation|文档基金会|
+
+## 俚语
+
+|英语|释义|备注|
+|----|----|----|
+|pfffft|噗，有种不屑一顾的意思|
