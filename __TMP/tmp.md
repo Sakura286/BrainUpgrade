@@ -1,6 +1,158 @@
 
 # some temp memo
 
+发散记录
+每天睡前收敛一次，归类、小标题、问题与想法
+每周周末归类一次，移出本文件
+
+## 6-8
+
+realpath basename dirname
+注意用法
+
+### 试试自定义
+
+alias plz=sudo
+alias hentai=su
+
+### bridge
+
+**问题**：啥是bridge啊
+桥接模式 bridge 设计模式
+
+### 拓展磁盘空间
+
+装了fdisk但还是显示command not found
+
+`whereis fdisk`看到fdisk在`/sbin/fdisk`
+
+`echo $PATH`结果是`/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games`，没有上述的目录
+
+然后想到现在是普通用户，`/sbin`是管理员使用的目录，那么`sudo fdisk`使用管理员权限运行就行了
+
+### 关于configure和makefile的生成过程
+
+博客园 - Linux下使用automake、autoconf生成configure文件
+`https://www.cnblogs.com/bugutian/p/5560548.html`
+
+src --autoscan--> configure.scan --edit--> configure.ac
+
+configure.ac --aclocal--> aclocal.m4
+configure.ac + aclocal.m4 --autoconf--> configure
+configure.ac --autoheader--> config.h.in
+
+Makefile.am --automake--> Makefile.in
+Makefile.in + config.h.in + configure --configure--> Makefile
+
+### 关于QEMU debian
+
+通过
+Debian-Ports `https://www.debian.org/ports/`
+-->
+Debian-Wiki `https://wiki.debian.org/RISC-V`
+-->
+Debian Quick Image Baker`https://people.debian.org/~gio/dqib/`
+安装了 debian 12 riscv 版本（真几把难找）
+
+**问题**：从哪里找一个*稳定*版本的镜像？
+
+qemu跑前要装u-boot-qemu与opensbi
+但arch linux想要跑qemu的debian还得从apt仓库里把u-boot-qemu与opensbi给拉出来，用debtap转一下才能用
+AUR里找不到opensbi，里面有的u-boot-bin也不适合
+**想法**：能不能给AUR里面添加opensbi与u-boot-qemu？反正已经会点makepkg打包了。
+
+说实话，磁盘IO速度真慢
+
+**想法**：想看看chroot怎么搞，以及能不能跨架构使用
+**想法**：要是能交叉编译的话，是不是性能可以大大提升？
+
+### 关于Debian
+
+**问题**：中文输入法设置不好
+**问题**：桌面图标无法显示
+**问题**：Grub炸了，得修一下
+**想法**：能不能把Grub做得漂亮点？
+
+### perl
+
+chomp把回车\\n去掉
+
+unshift(A,B,C)
+把 B C 插入到A之前
+
+A if(a)
+if为操作语句的修饰符，这句话的意思是，如果a成立，那么执行A
+一种倒装的语句形式
+
+if条件为0或为空，则算false
+
+Perl 子程序可以和其他编程一样接受多个参数，子程序参数使用特殊数组 @_ 标明。
+
+因此子程序第一个参数为 $_[0], 第二个参数为 $_[1], 以此类推。
+
+my定义局部变量
+**问题**：儿子继承父亲不？
+
+可以用local变量暂时将全局变量定义为局部变量，等局部变量失效后再还回去
+
+使用static使变量离开函数后不销毁，等待下次调用的时候使用
+
+### 复制时显示进度
+
+`rsync --progress t01/demo.zip t02/`
+
+
+apt --fix-missing可以跳过有问题的包
+
+## 6-7
+
+完成https://gitee.com/openeuler/RISC-V/blob/master/doc/tutorials/test_example_xfce.md
+
+extra/qemu-common 7.0.0-10 [installed]
+    A generic and open source machine emulator and virtualizer
+extra/qemu-hw-display-virtio-gpu 7.0.0-10 [installed]
+    QEMU virtio-gpu display device
+extra/qemu-hw-display-virtio-gpu-gl 7.0.0-10 [installed]
+    QEMU virtio-gpu-gl display device
+extra/qemu-hw-display-virtio-gpu-pci 7.0.0-10 [installed]
+    QEMU virtio-gpu-pci display device
+extra/qemu-hw-display-virtio-gpu-pci-gl 7.0.0-10 [installed]
+    QEMU virtio-gpu-pci-gl display device
+extra/qemu-system-riscv 7.0.0-10 [installed]
+    QEMU system emulator for RISC-V
+extra/qemu-ui-sdl 7.0.0-10 [installed]
+    QEMU SDL UI driver
+extra/vde2 2.3.3-1 [installed]
+    Virtual Distributed Ethernet for emulators like qemu
+
+  -display sdl,gl=on \
+  -kernel "$fw" \
+  -bios none \
+  -drive file="$drive",format=raw,id=hd0 \
+  -object rng-random,filename=/dev/urandom,id=rng0 \
+  -device virtio-gpu-gl \
+  -device virtio-rng-device,rng=rng0 \
+  -device virtio-blk-device,drive=hd0 \
+  -device virtio-net-device,netdev=usernet \
+
+lsb_release -a
+LSB Version:    n/a
+Distributor ID: ManjaroLinux
+Description:    Manjaro Linux
+Release:        21.2.6
+Codename:       Qonos
+又学到了一手
+
+常见的错误提示用语：
+
+ERROR
+WARNING
+not found
+
+bleeding edge就是测试版，预览版的意思
+
+BusyBox 就是那个1M的集成了一大堆功能的shell
+
 ## 6-6
 
 不能在数组里用变量？

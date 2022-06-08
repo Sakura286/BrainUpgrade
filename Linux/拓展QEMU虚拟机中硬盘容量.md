@@ -93,6 +93,8 @@ Command (m for help): w
 growpart /dev/vda 1
 ```
 
+注意：我并没有多打空格
+
 拓展后，`/dev/vda1`扩容成功，但是`/dev/root`的大小仍然不变，这时需要使用如下命令
 
 ```bash
