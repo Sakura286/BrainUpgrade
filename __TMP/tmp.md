@@ -5,6 +5,30 @@
 每天睡前收敛一次，归类、小标题、问题与想法
 每周周末归类一次，移出本文件
 
+## 6-9
+
+### RISC-V conference
+
+李伟伟
+QEMU RISC-V Simulator
+
+V8 for RISC-V
+
+史宁宁
+OpenJDK for RISC-V
+
+张宏斌
+MLIR RISC-V Vector Dialect Proposal
+
+韩柳彤
+OpenCV for RISC-V vector（DNN？）
+
+徐东
+Arch Linux
+
+于波
+
+
 ## 6-8
 
 realpath basename dirname
@@ -60,6 +84,8 @@ qemu跑前要装u-boot-qemu与opensbi
 但arch linux想要跑qemu的debian还得从apt仓库里把u-boot-qemu与opensbi给拉出来，用debtap转一下才能用
 AUR里找不到opensbi，里面有的u-boot-bin也不适合
 **想法**：能不能给AUR里面添加opensbi与u-boot-qemu？反正已经会点makepkg打包了。
+
+**想法**：写一个教程，教怎么找qemu镜像
 
 说实话，磁盘IO速度真慢
 
