@@ -13,6 +13,84 @@
 
 ## 6-9
 
+### scrcpy 连接手机并设置中文
+
+错误：no permissions
+
+解决办法：
+
+```bash
+sudo adb kill-server
+sudo adb start-server
+```
+
+apt仓库里版本过旧1.17，需要手动到git仓库里下下来编译安装
+`https://github.com/Genymobile/scrcpy/blob/master/BUILD.md#simple`
+
+问题：不能WiFi连接
+
+解决办法：
+
+USB连接电脑时，`scrcpy --tcpip`连接手机
+
+再往后就可以`scrcpy --tcpip:10.0.0.0`无线连接手机了
+
+问题：不能输入中文
+
+`Could not inject char`
+`https://github.com/Genymobile/scrcpy/issues/1377`
+
+官方说不做这个，不过可以通过在电脑上与手机上安装同样的输入法（比如搜狗输入法）实现
+
+一些参数
+
+`scrcpy -S --hid-keyboard --tcpip=10.0.0.3`
+
+-S连接后手机息屏
+
+--hid-keyboard在搜狗输入法下不能用
+
+### 在vim里把内容复制到剪贴板上
+
+终端：konsole
+shell:zsh
+
+以下内容皆是在`/etc/vim/vimrc`里添加
+
+```bash
+set clipboard=unnamedplus # Linux
+set clipboard=unnamed # Windows, MacOS
+```
+
+这样设置之后，按v进入可视化模式，选择要复制的内容，按`"+y`复制到剪贴板上
+
+但是依然不方便
+
+那么，添加`set mouse=a`，让鼠标可以选中文字
+再添加`vmap <C-S-c> "+y`让`ctrl`+`shift`+`c`代替`"+y`命令
+
+这样，只需要按`ctrl`+`shift`+`c`就能复制到剪贴板了
+
+参考：
+
+`https://stackoverflow.com/questions/3961859/how-to-copy-to-clipboard-in-vim#:~:text=into%20your%20clipboard.-,vmap%20%3CC%2Dc%3E%20%22%2By,-Original%20discussion%20and`
+`https://vim.fandom.com/wiki/Mapping_keys_in_Vim_-_Tutorial_(Part_2)#:~:text=Ctrl%2BShift%2BF3%20you%20can%20use%20%3CC%2DS%2DF3%3E`
+
+### zsh-config
+
+总结内容：
+
+1. 安装oh-my-zsh，基础的美化+插件管理
+2. 安装powerlevel10k主题
+3. 安装zsh-auto
+
+`https://codeantenna.com/a/ZAYPLRYxTW`
+
+注意：
+
+1. 安装oh-my-zsh后才有$ZSH_CUSTOM变量
+2. 必须在同一个plugins里设置插件，例如
+
 ### RISC-V conference
 
 李伟伟
