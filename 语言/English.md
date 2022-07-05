@@ -51,6 +51,28 @@
 |elevation|提权；海拔|.n|
 |trunk|主干|.n|
 |mainfesto|宣言|.n|
+|interprocess|进程间的|
+|agnostic|不可知论者|.n & .adj|language agnostic应该怎么翻译？|
+|invoke|调用|.v|
+|instantiate|实例化|.n|
+|Whilst|同时|.adv|
+|bureaucratic|官僚的|.adj|
+|incorporate|合并|.v|
+|strain|拉紧|.v|
+|intuitive|直观的|.adj|
+|primitive|原始的|.adj|
+|portability|可移植性|.n|
+|quirk|怪癖|.n|
+|whenever|每当|.adv|
+|profile|性能分析|.n|performance analysis|
+|enlightening|启发性的|.adj|
+|popup|弹窗|.n|
+|optimisation|优化|.n|
+|trivial|琐碎的|.adj|
+|preamble|序言|.n|
+|Raspbian||.n|这是树莓派基于Debian开发的操作系统|
+|terminology|术语学|.n|
+|unorthodox|非正统|.adj|
 
 ## 词组
 
@@ -66,6 +88,11 @@
 ||integrated card|集成显卡|
 ||umbrella term|总称|
 |TDF|the document foundation|文档基金会|
+|IDL|interface data language|交互式数据语言|
+||escaped string|转义字符串|
+||be comprised of|包括|
+||Raspberry Pi|树莓派|
+|HP|Hewlett-Packard|惠普|
 
 ## 俚语
 

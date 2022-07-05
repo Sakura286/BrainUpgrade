@@ -5,11 +5,180 @@
 每天睡前收敛一次，归类、小标题、问题与想法
 每周周末归类一次，移出本文件
 
+## 7-4
+
+析构函数 ~ 函数销毁时执行，可以用来释放内存
+
+override关键字不是“重载”而是“重写”
+
+## 7-2
+
+### yum 与 apt 的对应关系
+
+```shell
+yum makecache
+yum update
+```
+
+分别对应于apt的
+
+```shell
+apt update
+apt upgrade
+```
+
+`yum install groupinstall 'Development Tools'` = `apt install build-essential`
+
+https://stackoverflow.com/questions/32533379/git-error-rpc-failed-result-22-http-code-404
+
+## 7-1
+
+自己编一个带调试信息的libc++
+
+libepoxy-dev
+
+## 6-29
+
+### 小工具
+
+功能：
+
+1. 区分出有/无问题的单元测试
+2. 给出错的单元测试归类
+3. 每一个出错的测试都记录日志
+
+#### 区分出有/无问题的单元测试
+
+输入：log内容
+输出：单元测试-失败状态键值对
+
+语言：python
+
+#### 给出错的单元测试归类
+
+输入：单元测试名称
+输出：每个单元测试对应的模块（即所在文件的根目录）
+
+语言：shell
+
+#### 每一个出错的测试都记录日志
+
+输入：log内容
+输出：每个出错的单元对应的日志文件
+
+语言：python
+
+## 6-28
+
+抽象类（通常称为 ABC）
+
+https://www.runoob.com/w3cnote/cpp-virtual-functions.html
+
+https://zhuanlan.zhihu.com/p/75172640
+
+https://stackoverflow.com/questions/35860527/warning-error-disabling-address-space-randomization-operation-not-permitted
+
+[[原创]C++ 虚函数解析](https://bbs.pediy.com/thread-266994.htm)
+
+## 6-27
+
+mv docker-buildx $HOME/.docker/cli-plugins
+export DOCKER_CLI_EXPERIMENTAL=enabled
+docker buildx build --platform linux/riscv64 -t debian:rv64 .
+docker run --platform=riscv64 -it --rm debian:rv64 /bin/bash
+
+### STL
+
+`https://zh.wikipedia.org/wiki/%E6%A0%87%E5%87%86%E6%A8%A1%E6%9D%BF%E5%BA%93`
+STL Standard Template Library 标准模板库
+HP STL - High Performance 元老
+SGI STL - Silicon Graphics Computer Systems Inc. GCC 使用
+`https://segmentfault.com/a/1190000039953389`
+
+openoffice用的是STLport
+`https://wiki.openoffice.org/wiki/Porting_Introduction`
+
+### vtabel
+
+需要**了解**虚函数和虚函数表等概念 C++
+
+### 提问方式
+
+`https://wiki.raptorcs.com/wiki/Porting/LibreOffice`
+`https://bugs.documentfoundation.org/show_bug.cgi?id=127099`
+观察了一下提问方式 Bugzilla!
+
+## 6-26
+
+步骤：
+
+1. 写入tar.xz，挂载volume，并且解压到volume，删掉文件
+2. 了解binfmt，看能否有其他的交叉编译的办法
+3. 编写文档
+
+docker CE & EE
+
+comunity edition
+enterprise edition
+
+dockerfile 的 FROM 就是 docker pull
+
+写双q有用吗？
+
+没看明白 VOLUME ，但是可能很有用
+
+可能还需要考虑端口映射的问题
+
+### docker build的上下文
+
+`https://blog.csdn.net/qianghaohao/article/details/87554255`
+
+对于`docker build -t <imageName:imageTag> .`指令
+
+docker client 将 `.` 目录打包，发送给 docker engine，engine 解压后将解压后的目录作为工作目录，如果没有特殊指定的话，将寻找 Dockerfile 开始构建
+
+## 6-24
+
+i registers
+
+## 6-23
+
+uno就是一种IDL（interface description language)
+
+## 6-13
+
+按此键 执行此操作
+Ctrl + Shift + O 打开收藏夹管理
+
 ## 6-12
+
+### in debian-rv
+
+问题：普通用户使用sudo的时候会这样
+susdo: unable to allocate pty No such device
+`https://serverfault.com/questions/905093/server-refused-to-allocate-pty-how-to-mount-devpts-automatically#:~:text=given%20every%20reboot%3A-,mount%20devpts%20/dev/pts%20%2Dt%20devpts,-Adding%20an%20fstab`
+
+#### 待解决
+
+bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
+
+`export LC_ALL=C`
+
+the java command requires a mounted proc fs (/proc)
+
+`https://stackoverflow.com/questions/36608455/error-installing-jdk-the-keytool-command-requires-a-mounted-proc-fs-proc-wi`
+
+### crossdebootsrap
+
+You need a real Debian-based system to run it on. Debootstrap can work on any system.
+
+binfmt-support
+
+测试与qemu的性能对比
 
 ### debian gnome的小问题
 
-
+怎么解决桌面无图标、无terminal快捷键的
 
 ## 6-9
 
@@ -112,7 +281,6 @@ Arch Linux
 
 于波
 
-
 ## 6-8
 
 realpath basename dirname
@@ -210,7 +378,6 @@ my定义局部变量
 ### 复制时显示进度
 
 `rsync --progress t01/demo.zip t02/`
-
 
 apt --fix-missing可以跳过有问题的包
 

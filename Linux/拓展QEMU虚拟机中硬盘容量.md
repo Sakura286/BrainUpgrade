@@ -90,6 +90,7 @@ Command (m for help): w
 其实比起上面这一大串，有更为简单的处理方式
 
 ```bash
+dnf install cloud-utils-growpart
 growpart /dev/vda 1
 ```
 

@@ -50,6 +50,10 @@ MD046 规则有四条：
 - indented(缩进)，即每一行代码前都有缩进。若启用，所有 fenced 代码会报错。
 - false。fenced 与 indented 类型随便用
 
+#### 导出PDF
+
+安装`princexml`后并把`<prince>/engine/bin`加到环境变量中
+
 ## Xshell
 
 ### Xshell颜色
