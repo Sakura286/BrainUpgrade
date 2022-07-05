@@ -29,7 +29,7 @@ apt upgrade
 
 `yum install groupinstall 'Development Tools'` = `apt install build-essential`
 
-https://stackoverflow.com/questions/32533379/git-error-rpc-failed-result-22-http-code-404
+`https://stackoverflow.com/questions/32533379/git-error-rpc-failed-result-22-http-code-404`
 
 ## 7-1
 
@@ -72,11 +72,11 @@ libepoxy-dev
 
 抽象类（通常称为 ABC）
 
-https://www.runoob.com/w3cnote/cpp-virtual-functions.html
+`https://www.runoob.com/w3cnote/cpp-virtual-functions.html`
 
-https://zhuanlan.zhihu.com/p/75172640
+`https://zhuanlan.zhihu.com/p/75172640`
 
-https://stackoverflow.com/questions/35860527/warning-error-disabling-address-space-randomization-operation-not-permitted
+`https://stackoverflow.com/questions/35860527/warning-error-disabling-address-space-randomization-operation-not-permitted`
 
 [[原创]C++ 虚函数解析](https://bbs.pediy.com/thread-266994.htm)
 
@@ -366,7 +366,7 @@ if条件为0或为空，则算false
 
 Perl 子程序可以和其他编程一样接受多个参数，子程序参数使用特殊数组 @_ 标明。
 
-因此子程序第一个参数为 $_[0], 第二个参数为 $_[1], 以此类推。
+因此子程序第一个参数为 `$_[0]`, 第二个参数为 `$_[1]`, 以此类推。
 
 my定义局部变量
 **问题**：儿子继承父亲不？
@@ -383,7 +383,7 @@ apt --fix-missing可以跳过有问题的包
 
 ## 6-7
 
-完成https://gitee.com/openeuler/RISC-V/blob/master/doc/tutorials/test_example_xfce.md
+完成`https://gitee.com/openeuler/RISC-V/blob/master/doc/tutorials/test_example_xfce.md`
 
 extra/qemu-common 7.0.0-10 [installed]
     A generic and open source machine emulator and virtualizer

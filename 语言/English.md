@@ -73,6 +73,26 @@
 |Raspbian||.n|这是树莓派基于Debian开发的操作系统|
 |terminology|术语学|.n|
 |unorthodox|非正统|.adj|
+|indentation|缩进|.n|
+|preceding|前面的|.adj|
+|legible|清晰易读的|.adj|
+|schematic|示意图|.n & .adj|
+|sophisticated|复杂的|.adj|
+|portion|部分|.n|
+|identifier|标识符|.n|
+|punctuation|标点符号|.n|
+|successive|连续的|.adj|
+|precision|精确|.n|
+|exponent|指数|.n|
+|collectively|作为集合地|.adv|
+|enclose|括|.v|
+|literal|常量|.n|
+|constant|常量|.n|
+|concatenate|串联|.v|
+|modulo|取模|.n|
+|remainder|余数|.n|
+|precendence|优先级|.n|
+|entity|实体|.n|
 
 ## 词组
 
@@ -93,9 +113,32 @@
 ||be comprised of|包括|
 ||Raspberry Pi|树莓派|
 |HP|Hewlett-Packard|惠普|
+||preprocessor directive|预处理器指令||
+||line comment|行注释|
+||block comment|块注释|
+||case sensitive|区分大小写|
+||compound data type|复合数据类型|
+||type deduction|类型推导|
+||assignment operator|赋值运算符|
+||ternary opeartor|三元运算符|
+||bitwise operator|位运算符|
 
 ## 俚语
 
 |英语|释义|备注|
 |----|----|----|
 |pfffft|噗，有种不屑一顾的意思|
+
+## 标点符号
+
+|标点|英语|中文|备注|
+|---|---|---|---|
+|`()`|parenthesis|括号||
+|`/`|slash|正斜杠||
+|`\`|back slash|反斜杠||
+|`{}`|curly brace|花括号||
+|`;`|semicolon|分号||
+|`:`|colon|冒号||
+|`.`|period|句号||
+|`'`|single quote|单引号||
+|`"`|double quote|双引号||
