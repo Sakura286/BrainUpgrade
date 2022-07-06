@@ -70,3 +70,5 @@
 - [VCS package guidelines](https://wiki.archlinux.org/index.php?title=VCS_package_guidelines_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)&redirect=no) 这个页面还没有简体中文的翻译
 
 - 自动备份也可以放到 compose 里，一个 compose 做所有事情。
+
+- 做一个openEuler桌面壁纸

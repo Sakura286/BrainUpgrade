@@ -93,8 +93,24 @@
 |remainder|余数|.n|
 |precendence|优先级|.n|
 |entity|实体|.n|
+|demonstrate|证明|.v|
+|provoke|引起|.v|
+|synonym|代名词|.n|
+|scope|作用域|.n|
+|validity|有效性|.n|
+|facilitate|促进|.v|
+|substantial|重大的|.adj|
+|exceed|超出，超过|.v|
+|syntactically|语法上|.adv|
+|indices|索引(复)|.n|
+|multidimensional|多维的|.adj|
+|bidimensional|二维的|.adj|
+|decay|腐烂，分解|.v|
+|manipulate|操纵|.v|
+|interchangeable|可互换的|.adj|
+|elaborate|详细制作|.v|
 
-## 词组
+## 词组 & 短语
 
 |英语简写|全称|汉语|备注|
 |:---|:---|:---|---|
@@ -122,6 +138,11 @@
 ||assignment operator|赋值运算符|
 ||ternary opeartor|三元运算符|
 ||bitwise operator|位运算符|
+||on the flip side|另一方面|
+||be perceived as|被视为|
+||generic type|泛型|
+||an excess of|多余的，过量的|
+||by convention|按照惯例|
 
 ## 俚语
 
@@ -131,14 +152,18 @@
 
 ## 标点符号
 
-|标点|英语|中文|备注|
-|---|---|---|---|
-|`()`|parenthesis|括号||
-|`/`|slash|正斜杠||
-|`\`|back slash|反斜杠||
-|`{}`|curly brace|花括号||
-|`;`|semicolon|分号||
-|`:`|colon|冒号||
-|`.`|period|句号||
-|`'`|single quote|单引号||
-|`"`|double quote|双引号||
+|标点|英语         |中文  |备注 |
+|--- |---          |---   |---  |
+|`()`|parenthesis  |括号  |
+|`/` |slash        |正斜杠|
+|`\` |back slash   |反斜杠|
+|`{}`|curly brace  |花括号|
+|`;` |semicolon    |分号  |
+|`:` |colon        |冒号  |
+|`.` |period       |句号  |
+|`'` |single quote |单引号|
+|`"` |double quote |双引号|
+|`&` |ampersand    |      |
+|`<>`|angle bracket|尖括号|
+|`[]`|square bracket|方括号|
+|`*` |asterisk     |星号  |
