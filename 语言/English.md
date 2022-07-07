@@ -109,6 +109,14 @@
 |manipulate|操纵|.v|
 |interchangeable|可互换的|.adj|
 |elaborate|详细制作|.v|
+|substantial|重大的|.adj|
+|exclusively|只|.adv|
+|entirety|整体|.n|
+|realm|领域|.n|
+|paradigm|范式|.n|
+|object-oriented|面向对象的|.adj|
+|pitfall|陷阱|.n|
+|Polymorphism|多态性|.n|
 
 ## 词组 & 短语
 
@@ -137,12 +145,14 @@
 ||type deduction|类型推导|
 ||assignment operator|赋值运算符|
 ||ternary opeartor|三元运算符|
+||binary operator|二元运算符|
 ||bitwise operator|位运算符|
 ||on the flip side|另一方面|
 ||be perceived as|被视为|
 ||generic type|泛型|
 ||an excess of|多余的，过量的|
 ||by convention|按照惯例|
+||in essence|本质上|
 
 ## 俚语
 
@@ -167,3 +177,4 @@
 |`<>`|angle bracket|尖括号|
 |`[]`|square bracket|方括号|
 |`*` |asterisk     |星号  |
+|`~` |tilde        |波浪号|
