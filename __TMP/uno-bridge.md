@@ -16,6 +16,17 @@
 RISCV调用规范
 [Chapter 18 - Calling Convention](https://riscv.org/wp-content/uploads/2015/01/riscv-calling.pdf)
 
+### 一个查阅类名及命名空间的好办法
+
+1. 打开[LibreOffice Modules](https://docs.libreoffice.org/)
+2. 随便点开一个模块，例如[bridges (libreoffice.org)](https://docs.libreoffice.org/bridges.html)
+3. 把最后形如`bridges.html`的部分改为`bridges/html`的形式
+
+这是个查阅bridge部分的好网站
+可以查阅命名空间：[LibreOffice Module bridges (master): Namespace List](https://docs.libreoffice.org/bridges/html/namespaces.html)
+可以查阅类：[LibreOffice Module bridges (master): Class List](https://docs.libreoffice.org/bridges/html/annotated.html)
+可以查阅文件：[LibreOffice Module bridges (master): File List](https://docs.libreoffice.org/bridges/html/files.html)
+
 ## 关于 loongarch64 `cpp2uno.cxx`
 
 ### 1. 未命名命名空间
