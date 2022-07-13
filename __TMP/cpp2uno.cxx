@@ -235,6 +235,13 @@ namespace
         of words passed so far.  We are interested only in n64 ABI,so it is the
         case.
         */
+    /*
+        https://www.openoffice.org/udk/cpp/man/cpp_bridges.html
+        The cpp2uno_call() function reads C++ parameters from the call stack and 
+        converts to binary (C-) UNO, if needed (C++ and UNO values are binary compatible
+        concerning the memory layout). If the UNO dispatch call has returned and
+        no exception has been signalled (pUnoExc), all out parameters are written back to C++.
+    */
     unsigned int nREG = 0; // MARK
 
     fprintf(stderr, "cpp2uno_call:begin\n");
@@ -252,16 +259,45 @@ namespace
       if (CPPU_CURRENT_NAMESPACE::return_in_hidden_param( pReturnTypeRef ) )
       {
         pCppReturn = gpreg[nREG]; // complex return via ptr (pCppReturn) // gpreg is void** // MARK
+        /*
+            grep - void**
+            grep[nREG] - 
+        */
         nREG++;
 
         pUnoReturn = ( bridges::cpp_uno::shared::relatesToInterfaceType( pReturnTypeDescr )
             ? alloca( pReturnTypeDescr->nSize )
             : pCppReturn); // direct way
+        /*
+          bridges::cpp_uno::shared::relatesToInterfaceType
+          Determines whether a type relates to an interface type (is itself an interface type, or might contain entities of interface type).
+          Parameters
+            type : a non-null pointer to a type description
+          Returns
+            true if the given type relates to an interface type
+          
+          alloca()
+          ::description
+          The alloca() function allocates size bytes of space in the stack
+          frame of the caller.  This temporary space is automatically freed
+          when the function that called alloca() returns to its caller.
+          ::return value
+          The alloca() function returns a pointer to the beginning of the
+          allocated space.  If the allocation causes stack overflow,
+          program behavior is undefined.
+          
+          若 pReturnTypeDescr 是接口类型或包含接口类型，则分配该type尺寸的内存，
+          否则返回gpreg[nREG]
 
+          MARK: 这是在做啥？
+        */
         fprintf(stderr, "cpp2uno_call:complexreturn\n");
 
       }
       else
+      /*
+          也就是说 DANGER_GET 了个空
+      */
       {
         pUnoReturn = pRegisterReturn; // direct way for simple types
 
@@ -274,29 +310,66 @@ namespace
     nREG++; // MARK??
 
     // stack space
-    static_assert(sizeof(void *) == sizeof(sal_Int64), "### unexpected size!"); // 286：编译期间断言
+    static_assert(sizeof(void *) == sizeof(sal_Int64), "### unexpected size!");
+    /*
+        static_assert 编译期间断言
+        如果 void* 的尺寸与 sal_Int64 不同，则在编译时抛出异常
+    */
     // parameters
     void ** pUnoArgs = (void **)alloca( 4 * sizeof(void *) * nParams );
+    /*
+        即申请了 4 * nParams 个 void** 指针的空间
+    */
     void ** pCppArgs = pUnoArgs + nParams;
     // indices of values this have to be converted (interface conversion cpp<=>uno)
     sal_Int32 * pTempIndices = (sal_Int32 *)(pUnoArgs + (2 * nParams));
+    /*
+        pTempIndices 指向了 pUnoArgs 指向的空间的正中间的位置，不过类型变成了 Int32
+    */
     // type descriptions for reconversions
     typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)(pUnoArgs + (3 * nParams));
+    /*
+        ppTempParamTypeDescr*
+                +-- +-----------------+
+                |   | void* x nParams |
+                |   +-----------------+ <------ ppTempParamTypeDescr* - typelib_TypeDescription**
+                |   | void* x nParams |
+        alloca  |   +-----------------+ <------ pTempIndices - sal_Int32*
+                |   | void* x nParams |
+                |   +-----------------+ <------ pCppArgs     - void**
+                |   | void* x nParams |
+                +-- +-----------------+ <------ pUnoArgs     - void**
+
+    */
 
     sal_Int32 nTempIndices   = 0;
-
 
     fprintf(stderr, "cpp2uno_call:nParams=%d\n", nParams);
 
     for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
     {
       const typelib_MethodParameter & rParam = pParams[nPos];
+      /*
+          typelib_MethodParameter: Description of an interface method parameter.
+      */
 
       typelib_TypeDescription * pParamTypeDescr = 0;
       TYPELIB_DANGER_GET( &pParamTypeDescr, rParam.pTypeRef );
+      /*
+          typelib_MethodParameter 的 pTypeRef 类型是 typelib_TypeDescriptionReference *
+          老生常谈了，先申请 Description， 然后使用 DANGER_GET 从 Reference 获取 Description
+          最后肯定有个 RELEASE 来销毁这个 Description（就在这个for 循环的结尾）
+      */
 
       if (!rParam.bOut && bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr )) // value
       {
+        /*
+            sal_Bool  bOut;
+            true: the call type of this parameter is [out] or [inout]
+            false: the call type of this parameter is [in]
+
+            这里做了个判断，如果这个 parameter 的 call type 为 out 或 inout 并且 是一个简单类型，那么 ↓
+        */
 
         fprintf(stderr, "cpp2uno_call:Param %u, type %u\n", nPos, pParamTypeDescr->eTypeClass);
 
@@ -305,17 +378,25 @@ namespace
           case typelib_TypeClass_FLOAT:
           case typelib_TypeClass_DOUBLE:
             if (nREG < MAX_FP_REGS) {
-
+              /*  定义在同目录的 share.hxx 里
+                  #define MAX_FP_REGS    (8)
+              */
               fprintf(stderr, "cpp2uno_call:fpr=%p\n", fpreg[nREG]);
 
               pCppArgs[nPos] = &(fpreg[nREG]);
               pUnoArgs[nPos] = &(fpreg[nREG]);
+              /*
+                  MARK：为什么 pCppArgs 和 pUnoArgs 都要存放一样的数据？
+              */
             } else {
 
               fprintf(stderr, "cpp2uno_call:fpr=%p\n", ovrflw[nREG - MAX_FP_REGS]);
 
               pCppArgs[nPos] = &(ovrflw[nREG - MAX_FP_REGS]);
               pUnoArgs[nPos] = &(ovrflw[nREG - MAX_FP_REGS]);
+              /*
+                  看起来溢出了的数据在 ovrflw 处
+              */
             }
             nREG++;
             break;
@@ -337,7 +418,12 @@ namespace
             }
             nREG++;
             break;
-
+            /*
+                浮点数与非浮点数的唯一区别，就在于处理浮点数时使用 FP ， 处理普通数字时使用 GP
+                看起来这里的 FP GP 并不是 frame pointer 和 global pointer
+                而是 float p?? 和 general p?? MARK
+                或许，是用 fp 作为浮点数栈指针， 而 gp 作为整型的栈指针？
+            */
         }
         // no longer needed
         TYPELIB_DANGER_RELEASE( pParamTypeDescr );
@@ -350,6 +436,10 @@ namespace
         void *pCppStack;
         if (nREG < MAX_GP_REGS) {
           pCppArgs[nPos] = pCppStack = gpreg[nREG];
+          /*
+              注意，碰到复杂类型只存到 pCppArgs 了，并且只用 gpreg
+              注意这里有个连等！
+          */
         } else {
           pCppArgs[nPos] = pCppStack = ovrflw[nREG - MAX_GP_REGS];
         }
@@ -362,16 +452,82 @@ namespace
         {
           // uno out is unconstructed mem!
           pUnoArgs[nPos] = alloca( pParamTypeDescr->nSize );
-          pTempIndices[nTempIndices] = nPos;
+          /*
+              上文中没有赋值的 pUnoArgs 在这里出现了
+              所以这里只是申请了个空间，暂时啥也没动
+          */
+          pTempIndices[nTempIndices] = nPos; 
+          /*
+              这里存的是数字， pTempIndices 是 sal_Int32*，那么 pTempIndices[i] 是 sal_Int32 类型
+              在进入循环之前，nTempIndices 是 0
+          */
           // will be released at reconversion
           ppTempParamTypeDescr[nTempIndices++] = pParamTypeDescr;
+          /*
+              还是得搬出这张图来
+                      +-- +-----------------+
+                      |   | void* x nParams |
+                      |   +-----------------+ <------ ppTempParamTypeDescr - typelib_TypeDescription**
+                      |   | void* x nParams |
+              alloca  |   +-----------------+ <------ pTempIndices - sal_Int32*
+                      |   | void* x nParams |
+                      |   +-----------------+ <------ pCppArgs     - void**
+                      |   | void* x nParams |
+                      +-- +-----------------+ <------ pUnoArgs     - void**
+              可以看出上面一系列做了这样的操作
+              1. pCppArgs[nPos] = pCppStack = gpreg[nREG];
+                 把 gpreg[i] 里的指针存到了 pCppArgs
+              2. pUnoArgs[nPos] = alloca( pParamTypeDescr->nSize );
+                 根据 description 里描述的数据大小，申请对应的内存空间，并在 pUnoArgs 处保存指针
+              3. pTempIndices[nTempIndices] = nPos;
+                 往 pTempIndices 处存了一个数 nPos
+              4. ppTempParamTypeDescr[nTempIndices++] = pParamTypeDescr;
+                 往 ppTempParamTypeDescr 处存一个指针，指针内容是 description*
+              
+              说起来，（从下往上）第三块内存能放
+
+              MXXK：我忽略了一个重要的问题，alloca既然是分配栈内存的，那么返回的指针是在低地址还是在高地址？
+              不可能，因为像上图分配各个区域的时候，是从低地址开始的
+          */
         }
         // is in/inout
+        /*
+            MARK: 所以 啥是 in/out ？？？？
+        */
         else if (bridges::cpp_uno::shared::relatesToInterfaceType( pParamTypeDescr ))
         {
+        /*
+            Determines whether a type relates to an interface type (is itself an interface type,
+            or might contain entities of interface type).
+            Parameters
+            type - a non-null pointer to a type description
+            Returns
+            true if the given type relates to an interface type
+            Definition at line 41 of file types.cxx.
+        */
           uno_copyAndConvertData( pUnoArgs[nPos] = alloca( pParamTypeDescr->nSize ),
               pCppStack, pParamTypeDescr,
               pThis->getBridge()->getCpp2Uno() );
+          /**
+              在 /include/uno/data.h 中
+
+              Copy construct memory with given value. The size of the destination value
+              must be larger or equal to the size of the source value. Interfaces are
+              converted/ mapped by mapping parameter
+
+              @param pDest            pointer to destination value memory
+              @param pSource          pointer to source value
+              @param pTypeDescr       type description of source
+              @param mapping          mapping to convert/ map interfaces
+
+              CPPU_DLLPUBLIC void SAL_CALL uno_copyAndConvertData(
+                void * pDest, void * pSource,
+                struct _typelib_TypeDescription * pTypeDescr, struct _uno_Mapping * mapping )
+                SAL_THROW_EXTERN_C();
+
+                对比上文只有in时的 pUnoArgs[nPos] = alloca( pParamTypeDescr->nSize );
+                这里（in/out）看起来不仅申请了空间，还把内存赋值过去了
+          */
           pTempIndices[nTempIndices] = nPos; // has to be reconverted
           // will be released at reconversion
           ppTempParamTypeDescr[nTempIndices++] = pParamTypeDescr;
@@ -401,15 +557,65 @@ namespace
 
     // invoke uno dispatch call
     (*pThis->getUnoI()->pDispatcher)( pThis->getUnoI(), pMemberTypeDescr, pUnoReturn, pUnoArgs, &pUnoExc );
+    /*
+        bridges::cpp_uno::shared::CppInterfaceProxy * pThis
+        https://docs.libreoffice.org/bridges/html/classbridges_1_1cpp__uno_1_1shared_1_1CppInterfaceProxy.html
+       
+        Position: bridges/inc/cppinterfaceproxy.hxx
+        
+        origin:
+        // Interface for individual CPP--UNO bridges:
+        Bridge * getBridge() { return pBridge; }
+        uno_Interface * getUnoI() { return pUnoI; }
+        typelib_InterfaceTypeDescription * getTypeDescr() { return pTypeDescr; }
+        const OUString& getOid() const { return oid; }
 
+        pUnoI 是 private 类型， getUnoI() 只是取出了这个 uno_Interface * 的类型
+
+        查阅 uno_Interface 的定义，在 include/uno/dispatcher.h 中
+
+        注释： The binary C uno interface description.
+        代码： uno_DispatchMethod pDispatcher;
+        对该行代码的注释： dispatch function
+
+        uno_DispatchMethod 的定义同样在该文件中：
+
+        typedef void (SAL_CALL * uno_DispatchMethod)(
+          struct _uno_Interface * pUnoI,
+          const struct _typelib_TypeDescription * pMemberType,
+          void * pReturn,
+          void * pArgs[],
+          uno_Any ** ppException );
+          
+        Function pointer declaration for the binary C uno dispatch function. Any pure out or return
+        value will be constructed by the callee, iff no exception is signalled.
+        If an exception is signalled, the any *ppException is properly constructed by the callee,
+        otherwise the pointer *ppException is set to 0.
+        An attribute get call is indicated by a non-null return pointer.
+
+        @param pUnoI        uno interface the call is performed on
+        @param pMemberType  member type description of a method or attribute
+        @param pReturn      pointer to return value memory;
+                            pointer may be undefined if void method, null if attribute set call.
+        @param pArgs        an array of pointers to arguments values.
+                            (remark: the value of an interface reference stores a
+                            uno_interface *, so you get it by *(uno_Interface **)pArgs[n])
+        @param ppException  pointer to pointer to unconstructed any to signal an exception.
+
+        MARK：这是在构造什么东西？？？
+
+    */
     fprintf(stderr, "cpp2uno_call2,after dispatch\n");
-
 
     // in case an exception occurred...
     if (pUnoExc)
     {
       // destruct temporary in/inout params
       for ( ; nTempIndices--; )
+      /*
+          一种简略写法，从 nTempIndices - 1 (包括) 循环到 0 (包括)
+          因为最后一次 nTempIndices + 1 了但是相应的内存空间没有赋值，所以首先 - 1 再继续操作
+      */
       {
         sal_Int32 nIndex = pTempIndices[nTempIndices];
 
@@ -424,6 +630,9 @@ namespace
       // has to destruct the any
       // is here for dummy
       return typelib_TypeClass_VOID;
+      /*
+          MARK
+      */
     }
     else // else no exception occurred...
     {
@@ -474,6 +683,23 @@ namespace
    * is called on incoming vtable calls
    * (called by asm snippets)
    */
+  /*
+      sal_Int32 nFunctionIndex 源自 privateSnippetExecutor $v0， 不知晓用途 ×
+         根据 codeSnippet ， v0 是传入的 functionIndex
+         codeSnippet 由 addLocalFunctions 调用
+         the function offset of the first vtable slot (typically coded into the code snippet for that vtable slot)
+      sal_Int32 nVtableOffset  源自 privateSnippetExecutor $v1,  不知晓用途 ×
+         根据 codeSnippet ， v1 是当时的 vtableOffset
+         codeSnippet 由 addLocalFunctions 调用
+         the offset of this vtable (needed to adjust the this pointer, typically
+         coded into the code snippets for all the filled vtable slots)
+
+
+      void ** gpreg ， 指向栈区 a0~a7 的存放起始处
+      void ** fpreg ， 指向栈区 f12~f19 的存放起始处
+      void ** ovrflw ， 指向栈底
+      sal_uInt64 * pRegisterReturn ， 指向栈顶 
+  */
   typelib_TypeClass cpp_vtable_call(
       sal_Int32 nFunctionIndex,
       sal_Int32 nVtableOffset,
@@ -481,7 +707,9 @@ namespace
       sal_uInt64 * pRegisterReturn /* space for register return */ )
   {
     static_assert( sizeof(sal_Int64)==sizeof(void *), "### unexpected!" );
-
+    /*
+        MARK：所以这里是在检查 sal_Int64 还是 void *？
+    */
 
     fprintf(stderr, "in cpp_vtable_call nFunctionIndex is %d\n", nFunctionIndex);
     fprintf(stderr, "in cpp_vtable_call nVtableOffset is %d\n", nVtableOffset);
@@ -655,7 +883,8 @@ namespace
   extern "C" void privateSnippetExecutor( ... );
 
   /*
-      MARK: privateSnippetExecutor() 的实体在哪？
+      MXXK: privateSnippetExecutor() 的实体在哪？
+      回答： 在call.s里
   */
 
   int const codeSnippetSize = 0x44;
@@ -666,6 +895,14 @@ namespace
       回答：因为生成的 codeSnippet 指令占 44 个字节
   */
 
+  /*
+      总结：生成了一段汇编，该段汇编：
+      1. 把 functionIndex 放到 $v0
+      2. 把 privateSnippetExecutor 放到 $t0
+      3. 把 cpp_vtable_call 放到 $t9
+      4. 把 vtableOffset 放到 $v1
+      5. 跳转到 $t0，即运行 privateSnippetExecutor 函数（在 call.s ）里
+  */
   unsigned char *  codeSnippet( unsigned char * code,
       sal_Int32 functionIndex, sal_Int32 vtableOffset,
       bool bHasHiddenParam )
@@ -689,6 +926,7 @@ namespace
             vtableOffset
             CPPU_CURRENT_NAMESPACE::return_in_hidden_param(reinterpret_cast<typelib_InterfaceAttributeTypeDescription * >(member)->pAttributeTypeRef));
   */
+
   {
 
      fprintf(stderr,"in codeSnippet functionIndex is %d\n", functionIndex);
@@ -699,7 +937,7 @@ namespace
     if ( bHasHiddenParam )
       functionIndex |= 0x80000000;
     /*
-      MARK 
+      MARK ，不知道为什么要这样做
     */
 
     unsigned int * p = (unsigned int *) code;
@@ -823,12 +1061,43 @@ bridges::cpp_uno::shared::VtableFactory::mapBlockToVtable(void * block)
 }
 
 // 286 codeSnippetSize:0x44;
+/*
+    Calculate the size of a raw vtable block.
+
+    Parameters
+    slotCount - the number of virtual function slots the returned vtable block shall support
+                (if there are any platform-specific slots, like an RTTI pointer, or a pointer
+                to a destructor, they are not covered by slotCount)
+    Returns
+    the size of the raw vtable block, in bytes
+
+    也就是说 slotCount 并不包括那两个 —— 用作 null 和 desctructor 的（见initializeBlock
+    注意，每个槽增加了codeSnippetSize
+    MARK，WHY？
+*/
 std::size_t bridges::cpp_uno::shared::VtableFactory::getBlockSize(
     sal_Int32 slotCount)
 {
     return (slotCount + 2) * sizeof (Slot) + slotCount * codeSnippetSize;
-} // 286 原有的每个槽都增加codeSnippetSize，并且多出来两个新的槽
+}
 
+
+/*
+    Initialize a raw vtable block.
+
+    Parameters
+    block - the start address of the raw vtable block
+    slotCount - the number of slots
+    vtableNumber - zero-based count across all the most derived type's vtables (for vtable's "offset to top" slot)
+    type - non-null most derived type (for vtable's "typeinfo pointer" slot)
+    Returns
+    a pointer past the last vtable slot
+    
+    这里并没有传入 vtableNumber ，而生成的 slots 大小应该由 block 决定
+
+    初始化Slot list，最后返回的指针指向了slot list 最后一个元素的顶部
+    即，最后的指针指向了slots所在内存区域的结尾（顶部）
+*/
 bridges::cpp_uno::shared::VtableFactory::Slot *
 bridges::cpp_uno::shared::VtableFactory::initializeBlock(
     void * block, sal_Int32 slotCount, sal_Int32,
@@ -838,8 +1107,57 @@ bridges::cpp_uno::shared::VtableFactory::initializeBlock(
     slots[-2].fn = 0; //null
     slots[-1].fn = 0; //destructor
     return slots + slotCount;
-} // 初始化Slot list，最后返回的指针指向了slot list 最后一个元素的顶部
-  // 也就是说，最后的指针指向了slots所在内存区域的结尾（顶部）
+}
+
+/*
+    https://docs.libreoffice.org/bridges/html/classbridges_1_1cpp__uno_1_1shared_1_1VtableFactory.html#aa9e8f20f20514109a6b1c8780ce84487
+
+    unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions	(
+      Slot ** 	slots,
+      unsigned char * 	code,
+      sal_PtrDiff 	writetoexecdiff,
+      typelib_InterfaceTypeDescription const * 	type,
+      sal_Int32 	functionOffset,
+      sal_Int32 	functionCount,
+      sal_Int32 	vtableOffset 
+    )	
+    Fill the vtable slots corresponding to all local (i.e., not inherited) functions of a 
+    given interface type (and generate any necessary code snippets for them).
+
+    Parameters
+      slots - on input, points past the vtable slot to be filled with the last virtual function 
+              local to the given type; on output, points to the vtable slot filled with the first
+              virtual function local to the given type
+      code - points to the start of the area where code snippets can be generated
+      writetoexecdiff - when the same code area is mapped twice, once for writing for code-generation,
+                        and once for code-execution, then this records the offset from a writable address
+                        to its executable address
+      type - the interface type description for which to generate vtable slots
+      functionOffset - the function offset of the first vtable slot (typically coded into the
+                       code snippet for that vtable slot)
+      functionCount - the number of vtable slots to fill (the number of local functions of the
+                      given type, passed in so that it doesn't need to be recomputed)
+      vtableOffset - the offset of this vtable (needed to adjust the this pointer, typically
+                     coded into the code snippets for all the filled vtable slots)
+    Returns
+      a pointer to the remaining code snippet area
+*/
+/*
+    对于 sal_PtrDiff ，根据 include/sal/types.h 
+    #if SAL_TYPES_SIZEOFPOINTER == 4
+      typedef sal_Int32           sal_PtrDiff;
+    #elif SAL_TYPES_SIZEOFPOINTER == 8
+      typedef sal_Int64           sal_PtrDiff;
+    也就是说，pointer的尺寸是 64， 则 sal_PtrDiff 其实就是 sal_Int64
+*/
+/*
+    addLocalFunctions 在 bridges/inc/vtablefactory.hxx 定义接口
+                      在 bridges/source/cpp_uno/shared/vtablefactory.cxx 实现，由 VtableFactory::createVtables() 调用
+    createVtables     在 bridges/source/cpp_uno/shared/vtablefactory.cxx 实现，由 VtableFactory::getVtables() 调用
+    getVtables        在 bridges/source/cpp_uno/shared/cppinterfaceproxy.cxx 实现，由 CppInterfaceProxy::create() 调用
+    create()          在 bridges/source/cpp_uno/shared/bridge.cxx 实现，由 uno2cppMapping() 调用
+    uno2cppMapping()  是 Bridge 类的友元函数 ，该类在 bridges/source/cpp_uno/shared/bridge.hxx 里定义
+*/
 unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
     Slot ** slots, unsigned char * code, sal_PtrDiff writetoexecdiff,
     typelib_InterfaceTypeDescription const * type, sal_Int32 functionOffset,
@@ -854,7 +1172,19 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
    fprintf(stderr, "nMembers=%d\n", type->nMembers);
    fflush(stderr);
 
+  /*
+      Not all members are always initialized (not yet initialized members being null); there are three levels:
 
+      Minimally, only aBase, pBaseTypeDescription, aUik, nBaseTypes, and ppBaseTypes are initialized;
+          aBase.bComplete is false. This only happens when an interface type description is created with
+          typelib_static_mi_interface_type_init or typelib_static_interface_type_init.
+      At the next level, nMembers, ppMembers, nAllMembers, ppAllMembers are also initialized;
+          aBase.bComplete is still false. This happens when an interface type description is created with
+          typelib_typedescription_newMIInterface or typelib_typedescription_newInterface.
+      At the final level, pMapMemberIndexToFunctionIndex, nMapFunctionIndexToMemberIndex,
+          and pMapFunctionIndexToMemberIndex are also initialized; aBase.bComplete is true.
+          This happens after a call to typelib_typedescription_complete.
+  */
   for (sal_Int32 i = 0; i < type->nMembers; ++i) {
     typelib_TypeDescription * member = 0;
     TYPELIB_DANGER_GET(&member, type->ppMembers[i]);
@@ -882,15 +1212,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                              code-generation, and once for code-execution, then this records
                              the offset from a writable address to its executable address
             MARK：什么是 code snippet ？
-            猜测
-            +---------------+
-            | codeexecution |  
-            +---------------+  <------ s->fn 所以是程序执行的入口？
-            |code-generation|  = writetoexecdiff
-            +---------------+
-            |  code snippet |  = code
-            +---------------+
-
+            
             然后 s 指向了 Slot 列表里的下一个槽
         */
         code = codeSnippet(
@@ -900,13 +1222,18 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
               typelib_InterfaceAttributeTypeDescription * >(
                 member)->pAttributeTypeRef));
         /*
+            这里把 typelib_TypeDescriptionReference 强制转换成了 typelib_InterfaceAttributeTypeDescription
+            然后查看是不是复杂类型
+
             执行 codeSnippet ，会在原code指向的地址生成一些汇编代码，该段汇编会做如下几件事：
             1. 把 functionOffset 放到 $v0
             2. 把 privateSnippetExecutor() 入口放到 $t0
             3. 把 cpp_vtable_call() 入口放到 $t9
             4. 把 vtableOffset 放到 $v1
             5. 跳转到 privateSnippetExecutor()
-            然后返回该段代码的尾部
+
+            codeSnippet执行完后
+            code = code + codeSnippetSize;
         */
         // Setter:
         if (!reinterpret_cast<

@@ -53,7 +53,10 @@ global namespace，在全局作用域中定义的名字，使用时双冒号左�
 
 `typelib_InterfaceTypeDescription` `#426`
 `typelib_TypeDescription` `#432`
+
 `TYPELIB_DANGER_GET()` `#433`
+参考：[LibreOffice: typelib/typedescription.h File Reference](https://api.libreoffice.org/docs/cpp/ref/a00251.html)
+
 `typelib_TypeClass_INTERFACE_ATTRIBUTE` `#436`
 `typelib_InterfaceAttributeTypeDescription` `#438`
 
