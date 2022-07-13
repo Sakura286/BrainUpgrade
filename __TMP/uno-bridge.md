@@ -1,5 +1,32 @@
-
 # Memo in UNO
+
+## 7-13 小结
+
+1. 为了理解 cpp2uno.cxx 的源代码，翻阅了一定的资料与源代码，并为大部分的代码片段做了较为详尽的笔记或图解，虽然暂时核心内容（我觉得是传入数据的组织方式）还不求甚解
+2. 理清了mips64 里 call.s 与 cpp2uno.cxx 里的调用关系，整体代码分成了两块：
+   1. 将 vtable block 转为 slot 列表，在 slot 列表之前增添析构函数，并对每个 slot 添加 codeSnippet；包括 `flushCode`、`mapBlockToVtable`、`getBlockSize`、`initializeBlock`、`addLocalFunctions`、`codeSnippet`
+   2. `codeSnippet` 函数使用位操作生成了汇编代码，该段汇编将`cpp_vtable_call`、`privateSnippetExecutor`的地址放到合适的寄存器，并跳转`privateSnippetExecutor`；`privateSnippetExecutor`在`call.s`里，开辟栈并将大量寄存器压栈，保存了栈内数据地址的指针后调用了`cpp_vtable_call`，而`cpp_vtable_call`在运行过程中又调用了`cpp2uno_call`，`cpp2uno_call`又调用了`return_in_hidden_param` `is_complex_struct`来判断数据的类型是否为复杂数据类型（接口、方法）等，开辟内存存放指向 cpp 数据与 uno 数据的指针，并调用外部定义的函数来进行数据转换
+
+3. （错误尝试）对此项目使用IDE Clion，尝试无果后发现 Jetbrain 官方明确表示暂时不支持 LibreOffice 的Makefile —— 继续VS Code
+4. （未尝试）暂时对此段代码本身的理解就到这里了，需要了解数据的组织方式，目前能想到的有三种途径
+   1. 读官方文档，了解 uno 有关的各种数据类型
+   2. 在 qemu-system 里调试单元测试，观察数据是怎样传入的
+   3. 顺着源代码扒拉出调用的逻辑链（见下），不过emm……读起来大概挺费事，先大致浏览建立个印象
+
+
+```plain
+addLocalFunctions 在 bridges/source/cpp_uno/shared/vtablefactory.cxx 实现
+                  由 VtableFactory::createVtables() 调用
+createVtables     在 bridges/source/cpp_uno/shared/vtablefactory.cxx 实现
+                  由 VtableFactory::getVtables() 调用
+getVtables        在 bridges/source/cpp_uno/shared/cppinterfaceproxy.cxx 实现
+                  由 CppInterfaceProxy::create() 调用
+create()          在 bridges/source/cpp_uno/shared/bridge.cxx 实现
+                  由 uno2cppMapping() 调用
+uno2cppMapping()  是 Bridge 类的友元函数 ，该类在 bridges/source/cpp_uno/shared/bridge.hxx 里定义
+```
+
+
 
 ## 资料
 
