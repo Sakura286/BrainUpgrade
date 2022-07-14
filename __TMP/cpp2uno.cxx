@@ -249,7 +249,7 @@ namespace
     // return
     typelib_TypeDescription * pReturnTypeDescr = 0;
     if (pReturnTypeRef) // type: typelib_TypeDescriptionReference
-      TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef ); // MARK：Danger Get就很有意思
+      TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
 
     void * pUnoReturn = 0;
     void * pCppReturn = 0; // complex return ptr: if != 0 && != pUnoReturn, reconversion need // MARK
@@ -286,17 +286,16 @@ namespace
           allocated space.  If the allocation causes stack overflow,
           program behavior is undefined.
           
-          若 pReturnTypeDescr 是接口类型或包含接口类型，则分配该type尺寸的内存，
-          否则返回gpreg[nREG]
+          若 pReturnTypeDescr 是接口类型或包含接口类型，则分配该type尺寸的内存（并返回指针），
+          否则直接返回gpreg[nREG]
 
           MARK: 这是在做啥？
         */
         fprintf(stderr, "cpp2uno_call:complexreturn\n");
-
       }
       else
       /*
-          也就是说 DANGER_GET 了个空
+          也就是说 DANGER_GET 了个空？
       */
       {
         pUnoReturn = pRegisterReturn; // direct way for simple types
@@ -313,7 +312,7 @@ namespace
     static_assert(sizeof(void *) == sizeof(sal_Int64), "### unexpected size!");
     /*
         static_assert 编译期间断言
-        如果 void* 的尺寸与 sal_Int64 不同，则在编译时抛出异常
+        确保指针为64位（8字节）
     */
     // parameters
     void ** pUnoArgs = (void **)alloca( 4 * sizeof(void *) * nParams );
@@ -724,22 +723,32 @@ namespace
     {
       nFunctionIndex &= 0x7fffffff;
       pThis = gpreg[1];
+      /*
+          如果最高位为 1 ，那么把该位置 0
+      */
     }
     else
     {
       pThis = gpreg[0];
     }
+    /*
+      结合 codeSnippet() ， 如果 HasHiddenParam ， 那么 pThis 得向上指 1 位
+      MARK 为什么“ HasHiddenParam ”需要单独处理？
+    */
 
     fprintf(stderr, "cpp_vtable_call, pThis=%p, nFunctionIndex=%d, nVtableOffset=%d\n",
                 pThis, nFunctionIndex, nVtableOffset);
 
 
     pThis = static_cast< char * >(pThis) - nVtableOffset;
+    
     bridges::cpp_uno::shared::CppInterfaceProxy * pCppI =
         bridges::cpp_uno::shared::CppInterfaceProxy::castInterfaceToProxy( pThis );
-
+    /*
+      CppInterfaceProxy * CppInterfaceProxy::castInterfaceToProxy(void * pInterface)
+      pInterface == &pProxy->vtables (this emulated offsetof is not truly portable ):
+    */
     fprintf(stderr, "cpp_vtable_call, pCppI=%p\n", pCppI);
-
 
     typelib_InterfaceTypeDescription * pTypeDescr = pCppI->getTypeDescr();
 
@@ -937,7 +946,10 @@ namespace
     if ( bHasHiddenParam )
       functionIndex |= 0x80000000;
     /*
-      MARK ，不知道为什么要这样做
+      若 HasHiddenParam ，把最高位置 1 （因为是32位的类型）
+      MARK ，不完全知道为什么这样做
+      这里的位运算并没有实际对数据造成改变，只是附带了一些信息，
+      cpp_vtable_call() 里会在读出这个信息后改回去
     */
 
     unsigned int * p = (unsigned int *) code;
@@ -1033,7 +1045,11 @@ namespace
         MXXK: 这里为什么要jr？
         推测：应该是延迟指令槽，把填充 $v1 低 16 位的指令放到了 jr 之后
         指向的这段代码如果要执行，那么会跳转到t0，即执行 privateSnippetExecutor() 函数
-        所以，MARK： privateSnippetExecutor() 函数在哪？是怎么执行的？
+        所以，MXXK： privateSnippetExecutor() 函数在哪？是怎么执行的？
+        privateSnippetExecutor() 在同文件夹下的 call.s 里，看起来是在执行这个 codeSnippet 时拉起的
+        MARK： codeSnippet 被插入到了哪里？是怎么被运行的？
+        猜测：这种有一部分调用入口单独分离出来的情况，记得之前看虚函数教程的时候见过……虚表？
+
     */
     return (code + codeSnippetSize);
 
@@ -1041,7 +1057,9 @@ namespace
 
 }
 
-
+/*
+应该是将缓存内容写回内存
+*/
 void bridges::cpp_uno::shared::VtableFactory::flushCode(unsigned char const *bptr, unsigned char const *eptr)
 {
 #ifndef ANDROID
@@ -1056,6 +1074,9 @@ struct bridges::cpp_uno::shared::VtableFactory::Slot { void * fn; };
 
 bridges::cpp_uno::shared::VtableFactory::Slot *
 bridges::cpp_uno::shared::VtableFactory::mapBlockToVtable(void * block)
+/*
+    Given a pointer to a block, turn it into a vtable pointer.
+*/
 {
     return static_cast< Slot * >(block) + 2;
 }
@@ -1125,9 +1146,9 @@ bridges::cpp_uno::shared::VtableFactory::initializeBlock(
     given interface type (and generate any necessary code snippets for them).
 
     Parameters
-      slots - on input, points past the vtable slot to be filled with the last virtual function 
-              local to the given type; on output, points to the vtable slot filled with the first
-              virtual function local to the given type
+      slots - on input, points past the vtable slot to be filled with the last virtual
+              function local to the given type; on output, points to the vtable slot 
+              filled with the first virtual function local to the given type
       code - points to the start of the area where code snippets can be generated
       writetoexecdiff - when the same code area is mapped twice, once for writing for code-generation,
                         and once for code-execution, then this records the offset from a writable address
@@ -1151,12 +1172,53 @@ bridges::cpp_uno::shared::VtableFactory::initializeBlock(
     也就是说，pointer的尺寸是 64， 则 sal_PtrDiff 其实就是 sal_Int64
 */
 /*
-    addLocalFunctions 在 bridges/inc/vtablefactory.hxx 定义接口
-                      在 bridges/source/cpp_uno/shared/vtablefactory.cxx 实现，由 VtableFactory::createVtables() 调用
+    addLocalFunctions 由 VtableFactory::createVtables() 调用
     createVtables     在 bridges/source/cpp_uno/shared/vtablefactory.cxx 实现，由 VtableFactory::getVtables() 调用
     getVtables        在 bridges/source/cpp_uno/shared/cppinterfaceproxy.cxx 实现，由 CppInterfaceProxy::create() 调用
     create()          在 bridges/source/cpp_uno/shared/bridge.cxx 实现，由 uno2cppMapping() 调用
     uno2cppMapping()  是 Bridge 类的友元函数 ，该类在 bridges/source/cpp_uno/shared/bridge.hxx 里定义
+*/
+/*
+           +-----------------+
+           |                 |
+           |    .........    |
+           |                 |
+           +-----------------+
+           |                 |
+    +----->| CodeSnippet 02  |
+    |      |                 |
+    |      +-----------------+
+    |      |                 |
+    |  +-->| CodeSnippet 01  |
+    |  |   |                 |
+    |  |   +-----------------+ <----- code(start)
+    |  |   |    Slot   n     |
+    |  |   +-----------------+
+    |  |   |      ...        |
+    |  |   +-----------------+
+    +--+---|    Slot  02     |
+       |   +-----------------+
+       +---|    Slot  01     |
+           +-----------------+ <----- s(start)
+
+    图示的 Slot 里的 fn* 指向的区域没有加上 writetoexecdiff 偏移
+*/
+/*
+    传入数据：
+      writetoexecdiff = reinterpret_cast<sal_uIntPtr>(block.exec) - reinterpret_cast<sal_uIntPtr>(block.start)
+      type = type2
+      functionOffset = baseOffset.getFunctionOffset(type2->aBase.pTypeName)
+      functionCount = bridges::cpp_uno::shared::getLocalFunctions(type2)
+*/
+/*
+    MARK：7-14
+    现在有几个量对不起来：
+    getPrimaryFunctions(type)  [即 slotcount ]
+    getLocalFunctions(type) [即 functionCount]
+    baseOffset.getFunctionOffset(type2->aBase.pTypeName) [即 functionOffset ]
+    blocks.size()
+
+
 */
 unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
     Slot ** slots, unsigned char * code, sal_PtrDiff writetoexecdiff,
@@ -1186,6 +1248,11 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
           This happens after a call to typelib_typedescription_complete.
   */
   for (sal_Int32 i = 0; i < type->nMembers; ++i) {
+    /*
+        看起来这个 nMember 只包括了 local function 
+        而 slot 的总数是包括 primary function 的
+        MARK ： 上面可能在胡说
+    */
     typelib_TypeDescription * member = 0;
     TYPELIB_DANGER_GET(&member, type->ppMembers[i]);
     /*  TYPELIB_DANGER_GET在include/typelib/typedescription.h中
@@ -1211,7 +1278,6 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
             writetoexecdiff: when the same code area is mapped twice, once for writing for
                              code-generation, and once for code-execution, then this records
                              the offset from a writable address to its executable address
-            MARK：什么是 code snippet ？
             
             然后 s 指向了 Slot 列表里的下一个槽
         */
@@ -1223,7 +1289,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                 member)->pAttributeTypeRef));
         /*
             这里把 typelib_TypeDescriptionReference 强制转换成了 typelib_InterfaceAttributeTypeDescription
-            然后查看是不是复杂类型
+            然后查看是不是复杂类型(return_in_hidden_param)
 
             执行 codeSnippet ，会在原code指向的地址生成一些汇编代码，该段汇编会做如下几件事：
             1. 把 functionOffset 放到 $v0
@@ -1239,6 +1305,9 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
         if (!reinterpret_cast<
             typelib_InterfaceAttributeTypeDescription * >(
               member)->bReadOnly)
+        /*
+            喔，因为是属性，所以如果可写的话还需要一个 setter ？
+        */
         {
           (s++)->fn = code + writetoexecdiff;
           code = codeSnippet(code, functionOffset++, vtableOffset, false);
@@ -1265,5 +1334,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
   }
   return code;
 }
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
