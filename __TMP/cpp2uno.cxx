@@ -1301,6 +1301,9 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
             codeSnippet执行完后
             code = code + codeSnippetSize;
         */
+        /*
+            根据 rv 的调用规范，
+        */
         // Setter:
         if (!reinterpret_cast<
             typelib_InterfaceAttributeTypeDescription * >(

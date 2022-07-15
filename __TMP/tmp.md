@@ -5,6 +5,16 @@
 每天睡前收敛一次，归类、小标题、问题与想法
 每周周末归类一次，移出本文件
 
+## 7-15
+
+ssh 出问题了，可以加 -v 参数调试
+
+其实很有可能是服务器端没有装 openssh-server
+
+一个自己调试rv的办法
+
+https://bbs.aw-ol.com/topic/157/%E8%87%AA%E5%B7%B1%E5%8A%A8%E6%89%8B%E7%BC%96%E5%86%99%E4%B8%80%E4%B8%AA%E9%9D%9E%E5%B8%B8%E7%AE%80%E5%8D%95%E7%9A%84risc-v-c%E8%B0%83%E7%94%A8%E4%BD%BF%E7%94%A8abi%E8%A7%84%E5%88%99asm%E6%B1%87%E7%BC%96%E7%9A%84demo-%E4%BD%BF%E7%94%A8qemu-riscv64%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%B5%8B%E8%AF%95
+
 ## 7-13
 
 ### 像素格式

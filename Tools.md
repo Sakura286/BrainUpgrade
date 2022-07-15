@@ -1,5 +1,18 @@
 # 工具软件的用法
 
+## vim
+
+### 替换
+
+```plain
+:<range>s/<pattern>/<string>/<flags>
+```
+
+`<range>`为空时，仅匹配光标所在行，为`%`时，匹配所有行
+`<flags>`为空时，仅替换第一个匹配，为`g`是，替换所有匹配
+
+`%`和`g`一起使用时，全文替换
+
 ## Tabby
 
 A terminal emulator which is very beautiful.

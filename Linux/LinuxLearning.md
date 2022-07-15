@@ -9,6 +9,14 @@
 
 ## 仓库与打包
 
+### 使用代理
+
+临时使用代理的话，使用如下命令：
+
+```bash
+export http_proxy="http://<addr>:<port>"
+```
+
 ### pacman & yay
 
 `-Ss`: search in the repo
