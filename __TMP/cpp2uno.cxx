@@ -896,7 +896,8 @@ namespace
       回答： 在call.s里
   */
 
-  int const codeSnippetSize = 0x44;
+  //int const codeSnippetSize = 0x44;
+  int const codeSnippetSize = 0x4c;
 
   /*
       0x44: BIN(1000100) DEC(88)
@@ -992,8 +993,12 @@ namespace
        38:   3c030000        lui     v1,0x0
        3c:   01800008        jr      t0
        40:   34630000        ori     v1,v1,0x0
-     */
-     /*
+       执行 codeSnippet ，会在原code指向的地址生成一些汇编代码，该段汇编会做如下几件事：
+            1. 把 functionOffset 放到 $v0
+            2. 把 privateSnippetExecutor() 入口放到 $t0
+            3. 把 cpp_vtable_call() 入口放到 $t9
+            4. 把 vtableOffset 放到 $v1
+            5. 跳转到 privateSnippetExecutor()
         每条指令有32位长，即4B，那么每条指令所在的地址为0、4、8、c(12)、10(16)
      */
      /*
@@ -1002,45 +1007,121 @@ namespace
         cpp_vtable_call        Int64
         vtableOffset           Int32
      */
-    * p++ = 0x3c020000 | ((functionIndex>>16) & 0x0000ffff);
+     /*
+        改出所需生成的 RV 汇编：
+
+        确定逻辑：
+
+        1. 把 functionOffset 放到 t4
+        2. 把 privateSnippetExecutor() 入口放到 t0
+        3. 把 cpp_vtable_call() 入口放到 t6
+        4. 把 vtableOffset 放到 t5
+        5. 跳转到 privateSnippetExecutor()
+
+        **值得注意的是，RV 里分 U 型指令与 I 型指令
+        U 型指令有 20 位立即数字段
+        I 型指令有 12 位立即数字段
+
+        lui 是 u 型， ori 是 i 型
+
+
+        0:   00000eb7        lui     t4,0x0
+        4:   000eee93        ori     t4,t4,0x0
+
+       # privateSnippetExecutor
+        8:   000002b7        lui     t0,0x0
+        c:   0002e293        ori     t0,t0,0x0
+       10:   02029293        slli    t0,t0,0x20
+       14    00037333        and     t1,t1,zero
+       19:   00000337        lui     t1,0x0
+       1c:   00036313        ori     t1,t1,0x0
+       20:   0062e2b3        or      t0,t0,t1
+       # slli 在 rv64 的偏移值是6位，所以可以位移31位以上的位数
+       # https://msyksphinz-self.github.io/riscv-isadoc/html/rvi.html#slli
+
+       # cpp_vtable_call
+       24:   00000fb7        lui     t6,0x0
+       28:   000fef93        ori     t6,t6,0x0
+       2c:   02029293        slli    t0,t0,0x20
+       30    00037333        and     t1,t1,zero
+       34:   00000337        lui     t1,0x0
+       38:   00036313        ori     t1,t1,0x0
+       3c:   0062efb3        or      t6,t0,t1
+
+       # offset
+       40:   00000f37        lui     t5,0x0
+       44:   000f6f13        ori     t5,t5,0x0
+       48:   00028067        jalr    zero,t0,0x0
+     */
+
+    // 这里是 rv64 的
+
+    // 
+    * p++ = 0x00000eb7 | ((functionIndex) & 0xfffff000)
+    * p++ = 0x000eee93 | ((functionIndex << 20 ) & 0xfff00000);
+
+    * p++ = 0x000002b7 | ((((unsigned long)privateSnippetExecutor) >> 32) & 0x00000000fffff000);
+    * p++ = 0x0002e293 | ((((unsigned long)privateSnippetExecutor) >> 20) & 0x00000000fff00000);
+    * p++ = 0x02029293;
+    * p++ = 0x00037333;
+    * p++ = 0x00000337 | (((unsigned long)privateSnippetExecutor) & 0x00000000fffff000);
+    * p++ = 0x00036313 | ((((unsigned long)privateSnippetExecutor) << 20) & 0x00000000fff0000);
+    * p++ = 0x0062e2b3;
+
+
+    * p++ = 0x00000fb7 | ((((unsigned long)cpp_vtable_call) >> 32) & 0x00000000fffff000);
+    * p++ = 0x000fef93 | ((((unsigned long)cpp_vtable_call) >> 20) & 0x00000000fff00000);
+    * p++ = 0x02029293;
+    * p++ = 0x00037333;
+    * p++ = 0x00000337 | (((unsigned long)cpp_vtable_call) & 0x00000000fffff000);
+    * p++ = 0x00036313 | ((((unsigned long)cpp_vtable_call) << 20) & 0x00000000fff0000);
+    * p++ = 0x0062efb3;
+
+    * p++ = 0x00000f37 | ((vtableOffset) & 0xfffff000)
+    * p++ = 0x000f6f13 | ((vtableOffset << 20 ) & 0xfff00000);;
+    * p++ = 0x00028067;
+
+    // 下面是原来 MIPS64 的
     /*
+    * p++ = 0x3c020000 | ((functionIndex>>16) & 0x0000ffff);
+
         0011 1100 0000 0010 (0000 0000 0000 0000) 替换为 functionIndex 的 16 ~ 31 位
         opcode: 001111 -> 0F -> lui
         rs    : 00000  -> $zero
         rt    : 00010  -> $v0
         把 $v0 的高16位替换为 functionIndex 的 16 ~ 31 位
-    */
+
     * p++ = 0x34420000 | (functionIndex & 0x0000ffff);
-    /*
+
         0011 0100 0100 0010 (0000 0000 0000 0000) 替换 functionIndex 的 0 ~ 15 位
         opcode: 001101 -> 0D -> ori
         rs    : 00010  -> 2  -> $v0
         rt    : 00010  -> 2  -> $v0
         喔，前面作者写的注释里的0x0实际上需要被替换
         把 $v0 的低16位替换位 functionIndex 的 0 ~ 15 位
-    */
+
     * p++ = 0x3c0c0000 | ((((unsigned long)privateSnippetExecutor) >> 48) & 0x0000ffff);
     * p++ = 0x358c0000 | ((((unsigned long)privateSnippetExecutor) >> 32) & 0x0000ffff);
     * p++ = 0x000c6438;
     * p++ = 0x358c0000 | ((((unsigned long)privateSnippetExecutor) >> 16) & 0x0000ffff);
     * p++ = 0x000c6438;
     * p++ = 0x358c0000 | (((unsigned long)privateSnippetExecutor) & 0x0000ffff);
-    /*
+
         将 privateSnippetExecutor 的地址给到 $t0
-    */
+
     * p++ = 0x3c190000 | ((((unsigned long)cpp_vtable_call) >> 48) & 0x0000ffff);
     * p++ = 0x37390000 | ((((unsigned long)cpp_vtable_call) >> 32) & 0x0000ffff);
     * p++ = 0x0019cc38;
     * p++ = 0x37390000 | ((((unsigned long)cpp_vtable_call) >> 16) & 0x0000ffff);
     * p++ = 0x0019cc38;
     * p++ = 0x37390000 | (((unsigned long)cpp_vtable_call) & 0x0000ffff);
-    /*
+
         将 cpp_vtable_call 的地址放到 $t9
-    */
+
     * p++ = 0x3c030000 | ((vtableOffset>>16) & 0x0000ffff);
     * p++ = 0x01800008;
     * p++ = 0x34630000 | (vtableOffset & 0x0000ffff);
-    /*
+
         将 vtableOffset 存放到 $v1
         MXXK: 这里为什么要jr？
         推测：应该是延迟指令槽，把填充 $v1 低 16 位的指令放到了 jr 之后
@@ -1049,9 +1130,11 @@ namespace
         privateSnippetExecutor() 在同文件夹下的 call.s 里，看起来是在执行这个 codeSnippet 时拉起的
         MARK： codeSnippet 被插入到了哪里？是怎么被运行的？
         猜测：这种有一部分调用入口单独分离出来的情况，记得之前看虚函数教程的时候见过……虚表？
-
     */
+
     return (code + codeSnippetSize);
+
+
 
   }
 
@@ -1300,9 +1383,6 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
 
             codeSnippet执行完后
             code = code + codeSnippetSize;
-        */
-        /*
-            根据 rv 的调用规范，
         */
         // Setter:
         if (!reinterpret_cast<

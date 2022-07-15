@@ -25,69 +25,122 @@
         .ent	privateSnippetExecutor
         .type	privateSnippetExecutor, @function
 privateSnippetExecutor:
-        .set	noreorder
-        daddiu	$sp,$sp,-160
+        addi	sp,sp,-160
         .cfi_def_cfa_offset 160
-        sd	$ra,152($sp)
+        sd	ra,152(sp)
         .cfi_offset 31, -8
 .LEHB0 = .
         // Save the float point registers
-        sdc1	$f12,80($sp)
-        sdc1	$f13,88($sp)
-        sdc1	$f14,96($sp)
-        sdc1	$f15,104($sp)
-        sdc1	$f16,112($sp)
-        sdc1	$f17,120($sp)
-        sdc1	$f18,128($sp)
-        sdc1	$f19,136($sp)
+        // 将浮点寄存器内的64位存内存
+        fsd	fa1,80(sp)
+        fsd	fa2,88(sp)
+        fsd	fa3,96(sp)
+        fsd	fa4,104(sp)
+        fsd	fa5,112(sp)
+        fsd	fa6,120(sp)
+        fsd	fa7,128(sp)
+        fsd	fa8,136(sp)
         // Save the general purpose registers
-        sd	$a0,16($sp)
-        sd	$a1,24($sp)
-        sd	$a2,32($sp)
-        sd	$a3,40($sp)
-        sd	$a4,48($sp)
-        sd	$a5,56($sp)
-        sd	$a6,64($sp)
-        sd	$a7,72($sp)
+        sd	a0,16(sp)
+        sd	a1,24(sp)
+        sd	a2,32(sp)
+        sd	a3,40(sp)
+        sd	a4,48(sp)
+        sd	a5,56(sp)
+        sd	a6,64(sp)
+        sd	a7,72(sp)
         // Load arguments
         // a0=index
-        move	$a0,$v0
+        add	a0,t4,zero
         // a1=offset
-        move	$a1,$v1
+        add	a1,t5,zero
         // a2=gpregptr
-        daddiu	$a2,$sp,16
+        addi	a2,sp,16
         // a3=fpregptr
-        daddiu	$a3,$sp,80
+        addi	a3,sp,80
         // a4=ovrflw
-        daddiu	$a4,$sp,160
+        addi	a4,sp,160
+        /*
+        MIPS
+        +----------------+ 160 <------ ovrflw & old sp
+        | return address |
+        +----------------+ 152
+        |  what in here? |
+        +----------------+ 144
+        |      f19       |
+        +----------------+ 136
+        |                |
+        |      ....      |
+        |                |
+        +----------------+
+        |      f12       |
+        +----------------+ 80  <------ fpregptr
+        |      a7        |
+        +----------------+ 72
+        |                |
+        |      ....      |
+        |                |
+        +----------------+
+        |      a0        |
+        +----------------+ 16  <------ gpregptr
+        |                |
+        |     empty      |
+        |                |
+        +----------------+ 0   <------ sp
+        
+        MXXK: 在reference card里，MIPS是没有 a4~a7 寄存器的：
+        a0~a3 t0~t7 s0~s7 t8~t9
+
+        但是参考了某一个文档
+        https://chromium.googlesource.com/v8/v8/+/3.29.45/src/mips64/simulator-mips64.h?autodive=0%2F%2F
+        a0~a7 t0~t4 s0~s7 t8~t9
+
+        可见原来的 t0~t3 被替换为了函数参数寄存器
+        MARK：所以说 reference card 里的调用标准仅供参考？那到底怎么才能找到所需的呢？
+
+        */
+
         // Call cpp_vtable_call
-        jalr	$t9
+        // 因为在 codeSnippet 里， cpp_vtable_call 的地址放在了 t9
+        // rv 的 codeSnippet 里， cpp_vtable_call 的地址放在了 t6
         // a5=retregptr
-        move	$a5,$sp
+        move	a5,sp
+        jalr	ra,t6,0
+        
+        /*
+            MARK: 跳转 cpp_vtable_call 后的汇编还需要进一步理解
+        */
 
 .LEHE0 = .
         // Perform return value
-        li	$v1,10
-        beq	$v0,$v1,.Lfloat
-        li	$v1,11
-        beq	$v0,$v1,.Lfloat
-        ldc1	$f0,0($sp)
-        ldc1	$f2,8($sp)
-        ld	$v0,0($sp)
-        b	.Lfinish
-        ld	$v1,8($sp)
+        /*
+            MARK: 我不明白为什么要这样比较
+            猜测：在typelib里，float是10，double是11，这是在判断返回值是否为浮点数
+            我至今不明白为什么要用两个寄存器作返回值……
+
+            顺便，这里的浮点返回寄存器我不知道怎么替换，就把仅有的两个顶上了 MARK：Linus说：“先这样办。”
+            bullshit
+        */
+        li	a1,10
+        beq	a0,a1,.Lfloat
+        li	a1,11
+        beq	a0,a1,.Lfloat
+        fld	fa0,0(sp)
+        fld	fa1,8(sp)
+        ld	a0,0(sp)
+        ld	a1,8(sp)
+        jal     zero,.Lfinish
 .Lfloat:
-        ldc1	$f0,0($sp)
-        ldc1	$f2,8($sp)
+        fld	fa0,0(sp)
+        fld	fa1,8(sp)
 
 .Lfinish:
-        ld	$ra,152($sp)
+        ld	ra,152(sp)
         .cfi_restore 31
-        jr	$ra
-        daddiu	$sp,$sp,160
+        jalr	zero,ra,0
+        addi	sp,sp,160
         .cfi_def_cfa_offset 0
 
-        .set	reorder
         .end	privateSnippetExecutor
         .cfi_endproc
 .LFE0:
