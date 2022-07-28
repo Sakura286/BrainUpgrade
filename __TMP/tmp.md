@@ -5,6 +5,21 @@
 每天睡前收敛一次，归类、小标题、问题与想法
 每周周末归类一次，移出本文件
 
+## 7-24
+
+Emits a signed or unsigned LEB128 value at the current position. This only
+accepts constant expressions, because symbol addresses can change with relaxation, and we don’t support relocations to modify LEB128 values at link
+time.
+
+—— gas
+
+Use fixed length encoding for address offset instead of ULEB128
+encoding
+
+—— https://riscv.org/wp-content/uploads/2019/03/11.15-Shiva-Chen-Compiler-Support-For-Linker-Relaxation-in-RISC-V-2019-03-13.pdf
+
+也就是说，uleb128 不能用于变量的计算上，riscv的链接器不支持
+
 ## 7-15
 
 ssh 出问题了，可以加 -v 参数调试

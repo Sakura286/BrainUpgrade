@@ -1,5 +1,32 @@
 # 工具软件的用法
 
+## VMWare
+
+### 从 VMWare 里的 Linux 里复制文件到主机上
+
+#### 方法一： FileZilla
+
+使用 sftp 方式连接，适合复制小文件
+
+#### 方法二：共享文件夹
+
+虚拟机设置 - 选项 - 共享文件夹 - 添加
+
+在虚拟机里这样使用：
+
+```shell
+sudo vmhgfs-fuse .host:/<sourcedir> <targetdir>
+```
+
+其中，`<sourcedir>`为在虚拟机设置里设置的名称（不是目录），`<targetdir>`为 Linux 的指定目录
+
+参考：[VMware 如何映射宿主机Windows 的目录到 虚拟机Linux？ - one312的博客](https://blog.csdn.net/one312/article/details/104604013)
+
+### 关于虚拟机克隆
+
+1. 有快照的不能直接克隆
+2. 克隆快照需要该快照处于关机或挂起状态
+
 ## vim
 
 ### 替换

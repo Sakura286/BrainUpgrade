@@ -90,8 +90,8 @@ Command (m for help): w
 其实比起上面这一大串，有更为简单的处理方式
 
 ```bash
-dnf install cloud-utils-growpart
-growpart /dev/vda 1
+sudo dnf install cloud-utils-growpart
+sudo growpart /dev/vda 1
 ```
 
 注意：我并没有多打空格
@@ -99,7 +99,7 @@ growpart /dev/vda 1
 拓展后，`/dev/vda1`扩容成功，但是`/dev/root`的大小仍然不变，这时需要使用如下命令
 
 ```bash
-resize2fs /dev/vda1 
+sudo resize2fs /dev/vda1 
 ```
 
 需要这个命令的原因及这个命令做了什么，具体并不清楚，先**MARK**一下，日后如果有更深的理解了再来处理

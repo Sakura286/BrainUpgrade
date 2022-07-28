@@ -153,6 +153,7 @@
 ||an excess of|多余的，过量的|
 ||by convention|按照惯例|
 ||in essence|本质上|
+|UHS|ultra high speed|超高速度|
 
 ## 俚语
 
